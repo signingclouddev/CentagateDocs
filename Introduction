@@ -2,21 +2,16 @@
 title: 💁🏻Introduction
 ---
 
-# What is CENTAGATECLOUD?
+# What is CENTAGATE CLOUD?
 
 Centagate Cloud is a cloud-based authentication provider that helps organizations to manage users and authentication, complete with pre-built infrastructure and enterprise-grade solutions. Its main features include:
 
-Supports integration with standard protocols such as RESTful, OAuth2.0, OpenID, SAML, and RADIUS. 
-
-Various authentication method such as username, Q&A, FIDO2, OTP, QR Code, Push authentication, including passwordless authentication.  
-
-Management API that is ready to use that enable developers to manage the users.
-
-Enterprise ready mobile apps in Android and iOS that work with the solutions.
-
-SDKs that can integrate with that allowed developer to build own mobile application.
-
-Dashboard, admin interface, user managements, authentication logs and audit logs that help to understand the user identity-related information.
+* Supports integration with standard protocols such as RESTful, OAuth2.0, OpenID, SAML, and RADIUS.
+* Various authentication method such as username, Q&A, FIDO2, OTP, QR Code, Push authentication, including passwordless authentication.
+* Management API that is ready to use that enable developers to manage the users.
+* Enterprise ready mobile apps in Android and iOS that work with the solutions.
+* SDKs that can integrate with that allowed developer to build own mobile application.
+* Dashboard, admin interface, user managements, authentication logs and audit logs that help to understand the user identity-related information.
 
 Centagate Cloud prioritizes the balance between security and usability, making it a comprehensive and convenient solution for organizations.
 
