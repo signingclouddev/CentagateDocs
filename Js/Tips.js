@@ -3,13 +3,15 @@ export default function Tip({ children }) {
   return (
     <div
       style={{
-        borderLeft: '5px solid #4caf50',
-        padding: '10px',
-        backgroundColor: '#e8f5e9',
+        borderLeft: '5px solid #ff9800',
+        backgroundColor: '#fff3e0',
+        padding: '10px 15px',
         borderRadius: '5px',
+        fontSize: '16px',
+        color: '#333',
       }}
     >
-      <strong style={{ color: '#4caf50' }}>💡 TIP:</strong> {children}
+      <strong style={{ color: '#e65100' }}>💡 TIP:</strong> {children}
     </div>
   );
 }
