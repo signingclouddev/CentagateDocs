@@ -1,0 +1,79 @@
+# 🪶 LDAP
+
+### 🤔 What is LDAP?
+
+> "LDAP ***(Lightweight Directory Access Protocol)*** is a standard application protocol used in IT for accessing and managing distributed directory information services. It provides a lightweight and efficient means of organizing and querying data in a hierarchical structure. LDAP is commonly utilized for centralized authentication, authorization, and directory services in network environments. It operates over TCP/IP, with operations defined in the LDAP protocol for querying, modifying, adding, and deleting directory information. LDAP is implemented in various directory server software, such as OpenLDAP and Microsoft Active Directory, and it plays a crucial role in managing user identities and access control within enterprise systems."
+
+<br>
+
+### 🌐 How to add LDAP protocol in CENTAGATE?
+
+To register LDAP protocol into CENTAGATE, follow below steps:
+
+### Step 1️⃣: 
+Login to CENTAGATE using admin account.
+
+### Step 2️⃣:
+From the navigation bar, select ***“Apps → Add Apps”***.
+
+&#x20;    
+<p align="center">
+  <img 
+    src="https://raw.githubusercontent.com/signingclouddev/CentagateDocs/main/image/1.4 Developer Guide/1.4.2 Integration Guide/radius(1).png" 
+    width="240" 
+    height="100" 
+    alt="RADIUS (1)"
+  />
+</p>
+
+<br>
+
+### Step 3️⃣: 
+In the Add App form, there are 2️⃣ section you need to provide. 
+
+### 💡 General Info
+In the general section, you may need to provide:
+- ***App name*** - The apps name.
+- ***Domain Name*** - Domain to access the app.
+- ***Status*** - The status of the app either ACTIVE or INACTIVE.
+- ***User groups allowed to access this app*** - The selected group that can access to the app.
+
+&#x20;    
+<p align="center">
+  <img 
+    src="https://raw.githubusercontent.com/signingclouddev/CentagateDocs/main/image/1.4 Developer Guide/1.4.2 Integration Guide/radius(2).png" 
+    width="500" 
+    height="400" 
+    alt="RADIUS (2)"
+  />
+</p>
+
+<br>
+
+### 💡 Integration Details
+There are 7️⃣ fields need to be provided with value. There are:
+- ***Integration type*** - Choose LDAP for this field.
+- ***AD IP address*** - Registered AD IP address
+- ***AD Server Port*** - Current AD Server port
+- ***Username*** - The username
+- ***Login Password*** - The login password
+- ***Connection Protocol*** - Connection protocol can be chosen between:<br>
+✓ Plain Text<br>
+✓ STARTTLS Extension<br>
+✓ TLS<br>
+- ***Allowed IP addresses*** - Allow IP address to access the app.
+
+&#x20;    
+<p align="center">
+  <img 
+    src="https://raw.githubusercontent.com/signingclouddev/CentagateDocs/main/image/1.4 Developer Guide/1.4.2 Integration Guide/LDAP(1).png" 
+    width="500" 
+    height="400" 
+    alt="LDAP (1)"
+  />
+</p>
+
+<br>
+
+### Step 4️⃣:
+Click ***“Save”*** button to save the details.
