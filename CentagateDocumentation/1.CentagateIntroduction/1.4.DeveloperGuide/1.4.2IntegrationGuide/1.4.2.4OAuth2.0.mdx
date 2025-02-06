@@ -14,10 +14,10 @@ To register OAuth 2.0 protocol into CENTAGATE, follow below steps:
 ### Step 1️⃣:
 Login to CENTAGATE using admin account.
 
-> ### Step 4️⃣:
-> From the navigation bar, select ***“Apps → Add Apps”***.
->
-> &#x20;    
+### Step 4️⃣:
+From the navigation bar, select ***“Apps → Add Apps”***.
+
+&#x20;    
 <p align="center">
   <img 
     src="https://raw.githubusercontent.com/signingclouddev/CentagateDocs/main/image/1.4 Developer Guide/1.4.2 Integration Guide/radius(1).png" 
@@ -31,3 +31,77 @@ Login to CENTAGATE using admin account.
 
 ### Step 3️⃣: 
 In the Add App form, there are 3️⃣ section you need to provide. 
+
+### 💡 General Info
+
+In the general section, you may need to provide:
+- ***App name*** - The apps name. <br>
+- ***Domain Name*** - Domain to access the app. <br>
+- ***Status*** - The status of the app either ACTIVE or INACTIVE. <br>
+- ***User groups allowed to access this app*** - The selected group that can access to the app.
+
+&#x20;    
+<p align="center">
+  <img 
+    src="https://raw.githubusercontent.com/signingclouddev/CentagateDocs/main/image/1.4 Developer Guide/1.4.2 Integration Guide/radius(2).png" 
+    width="500" 
+    height="400" 
+    alt="RADIUS (2)"
+  />
+</p>
+
+<br>
+
+### 💡 Integration Details
+
+There are 5️⃣ field need to be filled. There are:
+- ***Integration type*** - Choose OAuth 2 for the integration type. <br>
+- ***Allowed IP addresses*** - The list of IP address that will have access to this app. <br>
+
+&#x20;    
+<p align="center">
+  <img 
+    src="https://raw.githubusercontent.com/signingclouddev/CentagateDocs/main/image/1.4 Developer Guide/1.4.2 Integration Guide/oauth(1).png" 
+    width="450" 
+    height="200" 
+    alt="OAuth (1)"
+  />
+</p>
+
+<br>
+
+### 💡 OAuth Info
+
+In this section, there are 5️⃣ fields need to be provided.
+- ***Allowed redirect URI addresses*** - List of URI address that will have access to this apps. <br>
+- ***Authorization code validity*** - Validity for authorize code to be expired. <br>
+- ***Access token validity*** - Validity for access to be expired. <br>
+- ***Custom claims*** - Any definition. <br>
+- ***Client branding*** - Logo or image URL.
+
+&#x20;    
+<p align="center">
+  <img 
+    src="https://raw.githubusercontent.com/signingclouddev/CentagateDocs/main/image/1.4 Developer Guide/1.4.2 Integration Guide/oauth(2).png" 
+    width="500" 
+    height="400" 
+    alt="OAuth (2)"
+  />
+</p>
+
+<br>
+
+&#x20;    
+<p align="center">
+  <img 
+    src="https://raw.githubusercontent.com/signingclouddev/CentagateDocs/main/image/1.4 Developer Guide/1.4.2 Integration Guide/oauth(3).png" 
+    width="500" 
+    height="600" 
+    alt="OAuth (3)"
+  />
+</p>
+
+<br>
+
+### Step 4️⃣:
+Click ***“Save”*** button to save the details.
