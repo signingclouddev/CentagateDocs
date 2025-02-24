@@ -1,3 +1,27 @@
 ---
 title: 👤 User Registration API
 ---
+
+# 👤User Registration API
+
+Call this function to add an active user.
+
+### 🔍URL
+| **METHOD**   | **PATH**                                                                      | 
+| ------------ | ----------------------------------------------------------------------------- | 
+| PUT          | {{host}}/CentagateWS/webresources/user/registerUserActivate/{{adminUsername}} |
+
+
+### 📏Parameters
+| KEY            | OCCURRENCES | DESCRIPTION                 |
+| -------------- | ----------- | --------------------------- |
+| firstName      | Required    | User’s first name.          |
+| lastName       | Required    | User’s last name.           |
+| username       | Required    | User’s username.            |
+| userApp        | Required    | User’s application ID.      |
+| userUniqueId   | Required    | User’s unique ID.           |
+| userClientId   | Required    | User’s client ID.           |
+| roles          | Required    | User’s roles. /> Role’s value : /> - Company Admin = 2 />- User = 3 /> - Group Admin = 4|
+| userGroup      | Required    | User’s group name. /> Example : />- default|
+| userEmail      | Required    | User’s valid email.         |
+| cenToken       | Required    | This value is calculated using SHA256 with value of authToken and secretCode as the encryption key.|
