@@ -21,7 +21,501 @@ Call this function to add an active user.
 | userApp        | Required    | User’s application ID.      |
 | userUniqueId   | Required    | User’s unique ID.           |
 | userClientId   | Required    | User’s client ID.           |
-| roles          | Required    | User’s roles. /> Role’s value : /> - Company Admin = 2 />- User = 3 /> - Group Admin = 4|
+| roles          | Required    | User’s roles. Role’s value : Company Admin = 2 , User = 3 , Group Admin = 4|
 | userGroup      | Required    | User’s group name. /> Example : />- default|
 | userEmail      | Required    | User’s valid email.         |
 | cenToken       | Required    | This value is calculated using SHA256 with value of authToken and secretCode as the encryption key.|
+
+::: tips
+⚠️ Make sure to follow the correct spelling of the key.
+:::
+
+### 📬Sample POSTMAN collection in JSON
+
+```json
+
+}"item": [
+		{
+			"name": "auth/list",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+                            //value
+							"var firstname ='user's firstname';\r",
+                            "var lastname ='user's lastname';\r",
+                            "var username ='user's username';\r",
+                            "var userapp ='user's selected app';\r",
+                            "var userUniqueId ='userUniqueId's username';\r",
+                            "var userClientId ='userClientId's username';\r",
+                            "var userAdditionalData1 ='data 1';\r",
+                            "var userAdditionalData2 ='data 2';\r",
+                            "var userAdditionalData3 ='data  3';\r",
+                            "var userAdditionalData4 ='data  4';\r",
+                            "var userAdditionalData5 ='data 5';\r",
+                            "var userEmail ='user's email';\r",
+                            "var roles ='user's roles';\r",
+                            "var userGroup ='user's group';\r"
+
+                            //calculate cenToken	
+                            "var adminUsername ='admin's username';\r",
+                            "var authToken ='authToken value';\r",
+							"var secretCode='secretCode';r",
+							"var currentDate = Math.round(new Date().getTime()/1000);\r",
+
+							"var message = username + authToken ;\r",
+                            "var hash = CryptoJS.HmacSHA256(message, secretCode);\r",
+                            "var cenToken = CryptoJS.enc.Hex.stringify(hash);\r",
+
+                            "postman.setEnvironmentVariable(\"firstname\", firstname);\r",
+                            "postman.setEnvironmentVariable(\"lastname\", lastname);\r",
+                            "postman.setEnvironmentVariable(\"username\", username);\r",
+                            "postman.setEnvironmentVariable(\"userapp\", userapp);\r",
+                            "postman.setEnvironmentVariable(\"userUniqueId\", userUniqueId);\r",
+                            "postman.setEnvironmentVariable(\"userClientId\", userClientId);\r",
+                            "postman.setEnvironmentVariable(\"userAdditionalData1\", userAdditionalData1);\r",
+                            "postman.setEnvironmentVariable(\"userAdditionalData2\", userAdditionalData2);\r",
+                            "postman.setEnvironmentVariable(\"userAdditionalData3\", userAdditionalData3);\r",
+                            "postman.setEnvironmentVariable(\"userAdditionalData4\", userAdditionalData4);\r",
+                            "postman.setEnvironmentVariable(\"userAdditionalData5\", userAdditionalData5);\r",
+                            "postman.setEnvironmentVariable(\"userEmail\", userEmail);\r",
+                            "postman.setEnvironmentVariable(\"roles\", roles);\r",
+                            "postman.setEnvironmentVariable(\"userGroup\", userGroup);\r",
+                            "postman.setEnvironmentVariable(\"adminUsername\", adminUsername);\r",
+							"postman.setEnvironmentVariable(\"cenToken\", cenToken);"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"firstname\": \"{{firstname}}\",\r\n   \"lastname\": \"{{lastname}}\"\r\n",
+                            "\r\n    \"username\": \"{{username}}\",\r\n   \"userapp\": \"{{userapp}}\"\r\n",
+                            "\r\n    \"userUniqueId\": \"{{userUniqueId}}\",\r\n   \"userClientId\": \"{{userClientId}}\"\r\n",
+                            "\r\n    \"userAdditionalData1\": \"{{userAdditionalData1}}\",\r\n   \"userAdditionalData2\": \"{{userAdditionalData2}}\"\r\n",
+                            "\r\n    \"userAdditionalData3\": \"{{userAdditionalData3}}\",\r\n   \"userAdditionalData4\": \"{{userAdditionalData4}}\"\r\n",
+                            "\r\n    \"userAdditionalData5\": \"{{userAdditionalData5}}\",\r\n   \"userEmail\": \"{{userEmail}}\"\r\n",
+                            "\r\n    \"roles\": \"{{roles}}\",\r\n   \"userGroup\": \"{{userGroup}}\"\r\n",
+                            "\r\n    \"cenToken\": \"{{cenToken}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "https://{{host}}/v2/CentagateWS/webresources/token/registerActiveToken/{{adminUsername}}"
+			},
+			"response": []
+		}
+]
+```
+
+
+### ♨️ Sample Code in JAVA
+
+```java
+public static void main(String[] args) {
+
+	ClientConfig config = new DefaultClientConfig ();
+	Client client = Client.create ( config );
+	WebResource service = client.resource ("https://<domain_name>/CentagateWS/webresources");
+			
+	Gson gson = new Gson();
+
+	String authToken = "{authToken}"
+	String adminUsername = "{adminUsername}";
+	String secretCode "{secretCode}";
+	String cenToken = convertHmacSha256(secretCode, adminUsername + authToken);
+
+	HashMap<String, String> map = new HashMap<String, String>();
+	map.put("firstName", "firstName");
+	map.put("lastName", "lastName");
+	map.put("username", "username");
+	map.put("userApp", "userApp");
+	map.put("userUniqueId", "userUniqueId");
+	map.put("userClientId", "userClientId");
+	map.put("userAdditionalData1", "userAdditionalData1");
+	map.put("userAdditionalData2", "userAdditionalData2");
+	map.put("userAdditionalData3", "userAdditionalData3");
+	map.put("userAdditionalData4", "userAdditionalData4");
+	map.put("userAdditionalData5", "userAdditionalData5");
+	map.put("userEmail", "userEmail"); 
+	map.put("roles", "roles");
+	map.put("userGroup", "userGroup"); 
+	map.put("cenToken", cenToken);  
+
+	ClientResponse response = service.path("user").path("registerUserActivate").path(adminUsername).accept(MediaType.APPLICATION_JSON).put(ClientResponse.class, gson.toJson(map));
+				
+	String retJson = response.getEntity(String.class);
+
+	HashMap<String, Object> returnData = (HashMap<String, Object>) gson.fromJson(retJson, HashMap.class);
+
+	String code = returnData.get("code").toString();
+	String message = returnData.get("message").toString();
+	String object = returnData.get("object").toString();
+}
+
+public static String convertHmacSha256(String secretKey, String params) throws NoSuchAlgorithmException, 
+            InvalidKeyException,IllegalStateException, SignatureException, NoSuchProviderException, Exception
+{
+	try
+	{
+		final SecretKeySpec secret_key = new SecretKeySpec ( StringUtils.getBytesUtf8 ( secretKey ) , "HmacSHA256" );
+		final Mac mac = Mac.getInstance ( "HmacSHA256" );
+		mac.init ( secret_key );
+		final byte[] bytes = mac.doFinal ( StringUtils.getBytesUtf8 ( params ) );
+		return Hex.encodeHexString ( bytes );
+	}
+	catch ( NoSuchAlgorithmException e )
+	{
+		throw new NoSuchAlgorithmException ( e );
+	}
+	catch ( InvalidKeyException e )
+	{
+		throw new InvalidKeyException ( e );
+	}
+	catch ( IllegalStateException e )
+	{
+		throw new IllegalStateException ( e );
+	}
+	catch ( Exception e )
+	{
+		throw new Exception ( e );
+	}
+} 
+```
+
+
+### 🇯‌🇸 Sample code in Node JS
+
+```nodejs
+const https = require('https')
+
+var crypto = require('crypto');
+var firstName = "<firstName>";
+var lastName = "<lastName>";
+
+var username = "<username>";
+var userApp = "<userApp>";
+var userUniqueId = "<userUniqueId>";
+
+var userClientId = "<userClientId>";
+var userAdditionalData1 = "<userAdditionalData1>";
+var userAdditionalData2 = "<userAdditionalData2>";
+
+var userAdditionalData3 = "<userAdditionalData3>";
+var userAdditionalData4 = "<userAdditionalData4>";
+var userAdditionalData5 = "<userAdditionalData5>";
+
+var userEmail = "<userEmail>";
+var roles = "<roles>";
+var userGroup = "<userGroup>";
+
+var adminUsername = "<adminUsername>";
+var authToken = "<authToken>";
+var secretCode = "<secretCode>";
+  
+var cenTokenText = adminUsername + authToken;
+var hash, cenToken;
+
+/* generate cenToken value*/
+cenToken = crypto.createHmac(sha256, secretCode);    
+cenToken.write(cenTokenText);
+cenToken.end();      
+hash = cenToken.read().toString('hex');    
+
+const data = JSON.stringify({
+	firstName: firstName,
+	lastName: lastName,
+	username: username,
+	userApp: userApp,
+	userUniqueId: userUniqueId,
+	userClientId: userClientId,
+	userAdditionalData1: userAdditionalData1,
+	userAdditionalData2: userAdditionalData2,
+	userAdditionalData3: userAdditionalData3,
+	userAdditionalData4: userAdditionalData4,
+	userAdditionalData5: userAdditionalData5,
+	userEmail: userEmail,
+	roles: roles,
+	userGroup: userGroup,
+	cenToken: hash
+})
+
+const options = {
+	hostname: "<domain_name>",
+	port: 443,
+	path:'/CentagateWS/webresources/user/registerUserActivate/'+adminUsername,
+	method: 'PUT',
+	headers: {
+		'Accept': 'application/json',
+		'Content-Type': 'application/json',
+	}
+}
+
+const req = https.request(options, res =>{
+	console.log(`HTTP Status Code: ${res.statusCode}`)
+	var body = '';
+	res.on('data', function(d){
+		
+	body += d;
+	var parsed = JSON.parse(body);
+	
+	if (parsed.code == 0){
+	   console.log('Authentication Succeed');
+	   console.log('Response:');
+	   console.log(body);
+	}
+	else {
+	  console.log('Authentication Fail, ' +'Message:' + parsed.message);
+	  console.log('Code:' + parsed.code); 
+	}
+		
+	})
+})
+
+req.on('ERROR', error => {
+	console.error(error)
+})
+
+req.write(data)
+req.end()
+```
+
+
+### 🐍 Sample code in Python
+```python
+#Configuration
+ADMINUSERNAME = {{adminUsername}}
+HOST = {{host}}
+ENDPOINT = "/CentagateWS/webresources/user/registerUserActivate/" + ADMINUSERNAME
+FIRSTNAME = {{firstName}}
+LASTNAME = {{lastName}}
+USERNAME = {{userName}}
+USERAPP = {{userApp}}
+USERUNIQUEID = {{userUniqueId}}
+USERCLIENTID = {{userClientId}}
+USERADDITIONALDATA1 = {{userAdditionalData1}}
+USERADDITIONALDATA2 = {{userAdditionalData2}}
+USERADDITIONALDATA3 = {{userAdditionalData3}}
+USERADDITIONALDATA4 = {{userAdditionalData4}}
+USERADDITIONALDATA5 = {{userAdditionalData5}}
+ROLES = {{roles}}
+USERGROUP = {{userGroup}}
+USEREMAIL = {{userEmail}}
+SECRET_CODE = {{secretCode}}
+AUTH_TOKEN ={{{authToken}}
+
+# Centoken calculation
+MESSAGE = ADMINUSERNAME + AUTH_TOKEN
+CENTOKEN = hmac.new(SECRET_CODE.encode(), MESSAGE.encode(), hashlib.sha256).hexdigest()
+
+# JSON Payload
+payload = json.dumps({
+    "firstName": FIRSTNAME,
+    "lastName": LASTNAME,
+    "username": USERNAME,
+    "userApp": USERAPP,
+    "userUniqueId": USERUNIQUEID,
+    "userClientId": USERCLIENTID,
+    "userAdditionalData1": USERADDITIONALDATA1,
+    "userAdditionalData2": USERADDITIONALDATA2,
+    "userAdditionalData3": USERADDITIONALDATA3,
+    "userAdditionalData4": USERADDITIONALDATA4,
+    "userAdditionalData5": USERADDITIONALDATA5,
+    "roles": ROLES,
+    "userGroup": USERGROUP,
+    "userEmail": USEREMAIL,
+    "cenToken": CENTOKEN
+})
+
+# Headers
+headers = {
+    'Content-Type': 'application/json'
+}
+
+# Make HTTPS PUT Request
+try:
+    conn = http.client.HTTPSConnection(HOST, context=context)
+    conn.request("PUT", ENDPOINT, payload, headers)
+    
+    res = conn.getresponse()
+    data = res.read()
+    print(data.decode("utf-8"))
+    
+    conn.close()
+except Exception as e:
+    print(f"An error occurred: {e}")
+```
+
+
+### 🐘 Sample code in PHP
+
+```php
+<?php
+$adminUsername = "<adminUsername>";
+$url = 'https://<domain_name>/CentagateWS/webresources/user/registerUserActivate/'.$adminUsername;
+
+$ch = curl_init($url);
+$secretCode = "<secretCode>";
+
+$authToken = "<authToken>";
+
+$firstName = "<firstName>";
+$lastName = "<lastName>";
+$username = "<username>";
+
+$userApp = "<userApp>";
+$userUniqueId = "<userUniqueId>";
+$userClientId = "<userClientId>";
+
+$userAdditionalData1 = "<userAdditionalData1>";
+$userAdditionalData2 = "<userAdditionalData2>";
+$userAdditionalData3 = "<userAdditionalData3>";
+$userAdditionalData4 = "<userAdditionalData4>";
+$userAdditionalData5 = "<userAdditionalData5>";
+
+$userEmail = "<userEmail>";
+$roles = "<roles>";
+$userGroup = "<userGroup>";
+
+$cenToken_text = $adminUsername.$authToken;
+$cenToken = hash_hmac('sha256', $cenToken_text, $secretCode); // calculate cenToken value
+
+$jsonData = array (
+	'firstName'=> $firstName,
+	'lastName'=> $lastName,
+	'username'=> $username,
+	'userApp'=> $userApp,
+	'userUniqueId'=> $userUniqueId,
+	'userClientId'=> $userClientId,
+	'userAdditionalData1'=> $userAdditionalData1,
+	'userAdditionalData2'=> $userAdditionalData2,
+	'userAdditionalData3'=> $userAdditionalData3,
+	'userAdditionalData4'=> $userAdditionalData4,
+	'userAdditionalData5'=> $userAdditionalData5,
+	'userEmail'=> $userEmail,
+	'roles'=> $roles,
+	'userGroup'=> $userGroup,
+	'cenToken' => $cenToken
+);
+
+$jsonDataEncoded = json_encode($jsonData);
+
+curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT');
+curl_setopt($ch, CURLOPT_POSTFIELDS, $jsonDataEncoded);
+curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+$result = curl_exec($ch);
+
+
+$obj = json_decode($result); 
+if ($obj->{'code'} != 0){
+	print "Authentication fail";
+	print "Message: ".$obj->{'message'}; 
+	echo " <br>"; 
+	print "Code: ".$obj->{'code'};
+}
+else {
+	print "Authentication succeed";
+	echo " <br>"; 
+	print "Message: ".$obj->{'message'}; 
+	echo " <br>"; 
+	print "Code: ".$obj->{'code'}; 
+	echo " <br>"; 
+	print "Result:" ;
+	echo " <br>"; 
+	print $result;
+}
+
+curl_close($ch);
+
+?>
+```
+
+### 🐿️ Sample code in Go Languange
+
+```go
+func RegisterUser() {
+
+	// Configuration
+	const (
+		adminUsername       = {{adminUsername}}
+		host                = {{host}}
+		endpoint            = "/CentagateWS/webresources/user/registerUserActivate/" + adminUsername
+		firstName           = {{firstName}}
+		lastName            = {{lastName}}
+		username            = {{username}}
+		userApp             = {{userApp}} 
+		userUniqueId        = {{userUniqueId}}
+		userClientId        = {{userClient}}
+		userAdditionalData1 = {{userAdditionalData1}}
+		userAdditionalData2 = {{userAdditionalData2}}
+		userAdditionalData3 = {{userAdditionalData3}}
+		userAdditionalData4 = {{userAdditionalData4}}
+		userAdditionalData5 = {{userAdditionalData5}}
+		roles               = {{roles}}
+		userGroup           = {{userGroup}}
+		userEmail           = {{userEmail}}
+	)
+
+	// Calculate CenToken
+	message := adminUsername + authToken
+	h := hmac.New(sha256.New, []byte(secretCode))
+	h.Write([]byte(message))
+	cenToken := hex.EncodeToString(h.Sum(nil))
+
+	// Prepare JSON Payload
+	payload := map[string]string{
+		"firstName":           firstName,
+		"lastName":            lastName,
+		"username":            username,
+		"userApp":             userApp,
+		"userUniqueId":        userUniqueId,
+		"userClientId":        userClientId,
+		"userAdditionalData1": userAdditionalData1,
+		"userAdditionalData2": userAdditionalData2,
+		"userAdditionalData3": userAdditionalData3,
+		"userAdditionalData4": userAdditionalData4,
+		"userAdditionalData5": userAdditionalData5,
+		"roles":               roles,
+		"userGroup":           userGroup,
+		"userEmail":           userEmail,
+		"cenToken":            cenToken,
+	}
+	payloadBytes, err := json.Marshal(payload)
+	if err != nil {
+		log.Fatalf("Failed to marshal JSON payload: %v", err)
+	}
+
+	// Create HTTP PUT Request
+	req, err := http.NewRequest("PUT", "https://" + host + endpoint, bytes.NewBuffer(payloadBytes))
+	if err != nil {
+		log.Fatalf("Failed to create request: %v", err)
+	}
+	req.Header.Set("Content-Type", "application/json")
+
+	// Execute HTTP request
+	client := &http.Client{}
+	resp, err := client.Do(req)
+	if err != nil {
+		log.Fatalf("Failed to make request: %v", err)
+	}
+	defer resp.Body.Close()
+
+	// Read response
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		log.Fatalf("Failed to read response body: %v", err)
+	}
+
+	fmt.Println(string(body))
+}
+```
