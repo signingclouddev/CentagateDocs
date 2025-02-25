@@ -1,0 +1,218 @@
+---
+title: 🔏 Token Registration API
+---
+
+# 🔏 Token Registration API
+
+Call this function to register an active SMS or OTP token.
+
+### 🔍 URL
+
+| **METHOD**   | **PATH**                                                                      | 
+| ------------ | ----------------------------------------------------------------------------- | 
+| PUT          | {{host}}/CentagateWS/webresources/user/registerUserActivate/{{adminUsername}} |
+
+
+### 📏Parameters
+| KEY            | OCCURRENCES | DESCRIPTION                 |
+| -------------- | ----------- | --------------------------- |
+| username       | Required    | Targeted username.          |
+| tokenSn        | Required    | Token serial number.        |
+| tokenType      | Required    | Token type. SMS = 1, OTP = 2|
+| cenToken       | Required    | This value is calculated using SHA256 with value of authToken and secretCode as the encryption key.|
+
+::: tips
+⚠️ Make sure to follow the correct spelling of the key.
+:::
+
+### 📬Sample POSTMAN collection in JSON
+
+```json
+}"item": [
+		{
+			"name": "registerActiveToken",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+                            //value
+							"var username ='user's username';\r",
+							"var tokenSn ='token serial number';\r",
+                            "var tokenType='token type';\r",
+          
+                            //calculate cenToken					
+                            "var adminUsername ='admin's username';\r",
+                            "var authToken ='authToken value';\r",
+							"var secretCode='secretCode';r",
+							"var currentDate = Math.round(new Date().getTime()/1000);\r",
+
+							"var message = username + authToken ;\r",
+                            "var hash = CryptoJS.HmacSHA256(message, secretCode);\r",
+                            "var cenToken = CryptoJS.enc.Hex.stringify(hash);\r",
+
+  							"postman.setEnvironmentVariable(\"username\", username);\r",
+							"postman.setEnvironmentVariable(\"tokenSn\", tokenSn);\r",
+							"postman.setEnvironmentVariable(\"tokenType\", tokenType);\r",
+                            "postman.setEnvironmentVariable(\"adminUsername\", adminUsername);\r",
+							"postman.setEnvironmentVariable(\"cenToken\", cenToken);"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\": \"{{username}}\",\r\n    \"tokenSn\": \"{{tokenSn}}\",\r\n    \"tokenType\": \"{{tokenType}}\",\r\n  \"cenToken\": \"{{cenToken}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "https://{{host}}/v2/CentagateWS/webresources/token/registerActiveToken/{{adminUsername}}"
+			},
+			"response": []
+		}
+]
+}
+```
+
+### ♨️Sample Code in JAVA
+
+```java
+public static void main(String[] args) {
+
+	ClientConfig config = new DefaultClientConfig ();
+	Client client = Client.create ( config );
+	WebResource service = client.resource ("https://<domain_name>/CentagateWS/webresources");
+			
+	Gson gson = new Gson();
+
+	String authToken = "{authToken}"
+	String adminUsername = "{adminUsername}";
+	String secretCode "{secretCode}";
+	String cenToken = convertHmacSha256(secretCode, adminUsername + authToken);
+
+	HashMap<String, String> map = new HashMap<String, String>();
+	map.put("username", "username");
+	map.put("tokenSn", "tokenSn");
+	map.put("tokenType", "tokenType");
+	map.put("cenToken", cenToken);  
+
+	ClientResponse response = service.path("token").path("registerActiveToken").path(adminUsername).accept(MediaType.APPLICATION_JSON).put(ClientResponse.class, gson.toJson(map));
+				
+	String retJson = response.getEntity(String.class);
+
+	HashMap<String, Object> returnData = (HashMap<String, Object>) gson.fromJson(retJson, HashMap.class);
+
+	String code = returnData.get("code").toString();
+	String message = returnData.get("message").toString();
+	String object = returnData.get("object").toString();
+}
+
+public static String convertHmacSha256(String secretKey, String params) throws NoSuchAlgorithmException, 
+            InvalidKeyException,IllegalStateException, SignatureException, NoSuchProviderException, Exception
+{
+	try
+	{
+		final SecretKeySpec secret_key = new SecretKeySpec ( StringUtils.getBytesUtf8 ( secretKey ) , "HmacSHA256" );
+		final Mac mac = Mac.getInstance ( "HmacSHA256" );
+		mac.init ( secret_key );
+		final byte[] bytes = mac.doFinal ( StringUtils.getBytesUtf8 ( params ) );
+		return Hex.encodeHexString ( bytes );
+	}
+	catch ( NoSuchAlgorithmException e )
+	{
+		throw new NoSuchAlgorithmException ( e );
+	}
+	catch ( InvalidKeyException e )
+	{
+		throw new InvalidKeyException ( e );
+	}
+	catch ( IllegalStateException e )
+	{
+		throw new IllegalStateException ( e );
+	}
+	catch ( Exception e )
+	{
+		throw new Exception ( e );
+	}
+}
+```
+
+### 🇯‌🇸‌ Sample Code in Node Js
+
+```nodejs
+
+const https = require('https')
+
+var crypto = require('crypto');
+var username = "<username>";
+var tokenSn = "<tokenSn>";
+var tokenType = "<tokenType>";
+
+var adminUsername = "<adminUsername>";
+var authToken = "<authToken>";
+var secretCode = "<secretCode>";
+  
+var cenTokenText = adminUsername + authToken;
+var hash, cenToken;
+
+/* generate cenToken value*/
+cenToken = crypto.createHmac(sha256, secretCode);    
+cenToken.write(cenTokenText);
+cenToken.end();      
+hash = cenToken.read().toString('hex');    
+
+const data = JSON.stringify({
+	username: username,
+	tokenSn: tokenSn,
+	tokenType: tokenType,
+	cenToken: hash
+})
+
+const options = {
+	hostname: "<domain_name>",
+	port: 443,
+	path:'/CentagateWS/webresources/token/registerActiveToken/"+adminUsername)',
+	method: 'PUT',
+	headers: {
+		'Accept': 'application/json',
+		'Content-Type': 'application/json',
+	}
+}
+
+const req = https.request(options, res =>{
+	console.log(`HTTP Status Code: ${res.statusCode}`)
+	var body = '';
+	res.on('data', function(d){
+		
+	body += d;
+	var parsed = JSON.parse(body);
+	
+	if (parsed.code == 0){
+	   console.log('Authentication Succeed');
+	   console.log('Response:');
+	   console.log(body);
+	}
+	else {
+	  console.log('Authentication Fail, ' +'Message:' + parsed.message);
+	  console.log('Code:' + parsed.code); 
+	}
+		
+	})
+})
+
+req.on('ERROR', error => {
+	console.error(error)
+})
+
+req.write(data)
+req.end()
+hash = hmac.read().toString('hex');
+```
