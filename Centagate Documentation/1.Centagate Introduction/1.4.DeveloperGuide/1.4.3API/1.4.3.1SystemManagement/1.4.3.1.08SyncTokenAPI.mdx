@@ -1,24 +1,53 @@
 ---
-title: 🔓Unlock OTP Token API
+title: 🔁Sync Token API 
 ---
 
-# 🔓Unlock OTP Token API
+# 🔁Sync Token API 
 
-Call this function to unlock/unsuspend OTP token.
+Call this function to register an offline OTP Token.
 
 ### 🔍 URL
 
 | **METHOD**   | **PATH**                                                                      | 
 | ------------ | ----------------------------------------------------------------------------- | 
-| PUT          | {{host}}/CentagateWS/webresources/token/syncToken/{{adminUsername}}          |
+| PUT          | {{host}}/CentagateWS/webresources/token/syncToken/{{adminUsername}}           |
 
 
 ### 📏Parameters
-| KEY            | OCCURRENCES | DESCRIPTION                 |
-| -------------- | ----------- | --------------------------- |
-| username       | Required    | The OTP owner's username.   |
-| data           | Required    | Base64 Encoded Of The List Of Questions And Answer. Format: Base64 (:: ,::). Example: 0:Quest1:Hello World,2::Foo123. It Will Be Sent As: MDpRdWVzdDE6SGVsbG8gV29ybGQsMjo6Rm9vMTIz |
-| cenToken       | Required    | The HMAC value is calculated using SHA-256 with secretCode as a key and plain text from admin username + authToken|
+
+import Table from '@theme/Table';
+
+<Table>
+  <thead>
+    <tr>
+      <th>KEY</th>
+      <th>OCCURRENCES</th>
+      <th>DESCRIPTION</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>username</td>
+      <td>Required</td>
+      <td>The OTP owner's username.</td>
+    </tr>
+    <tr>
+      <td>data</td>
+      <td>Required</td>
+      <td>Base64 Encoded Of The List Of Questions And Answer. Format: Base64 (:: ,::)
+
+*Example*: **0:Quest1:Hello World,2::Foo123**
+
+It Will Be Sent As: **MDpRdWVzdDE6SGVsbG8gV29ybGQsMjo6Rm9vMTIz**
+      </td>
+    </tr>
+    <tr>
+      <td>cenToken</td>
+      <td>Required</td>
+      <td>The HMAC value is calculated using SHA-256 with secretCode as a key and plain text from admin username + authToken.</td>
+    </tr>
+  </tbody>
+</Table>
 
 ::: tips
 ⚠️ Make sure to follow the correct spelling of the key.
@@ -145,7 +174,7 @@ public static String convertHmacSha256(String secretKey, String params) throws N
 
 ### 🇯‌🇸‌ Sample Code in Node Js
 
-```nodejs
+```js
 const https = require('https')
 
 var crypto = require('crypto');
