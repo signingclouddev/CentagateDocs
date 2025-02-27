@@ -14,14 +14,46 @@ Call this function to register FIDO token.
 
 
 ### 📏Parameters
-| KEY            | OCCURRENCES | DESCRIPTION                 |
-| -------------- | ----------- | --------------------------- |
-| userId         | Required    | The user's username.        |
-| tokenType      | Required    | Value = 3. Which token type for FIDO is 3. |
-| credentialId   | Required    | Will get these details from FIDO. |
-| keyHandler     | Required    | Will get these details from FIDO. |
-| publicKey      | Required    | Will get these details from FIDO. |
-| cenToken       | Required    | This value is calculated using SHA256 with value of authToken and secretCode as the encryption key.|
+
+import Table from '@theme/Table';
+
+<Table>
+  <thead>
+    <tr>
+      <th>KEY</th>
+      <th>OCCURRENCES</th>
+      <th>DESCRIPTION</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>username</td>
+      <td>Required</td>
+      <td>Targeted username.</td>
+    </tr>
+    <tr>
+      <td>tokenSn</td>
+      <td>Required</td>
+      <td>Token serial number.</td>
+    </tr>
+    <tr>
+      <td>tokenType</td>
+      <td>Required</td>
+      <td>
+Token type.
+
+Type available to choose:
+- 1 = SMS Token
+- 2 = OTP Token
+      </td>
+    </tr>
+    <tr>
+      <td>cenToken</td>
+      <td>Required</td>
+      <td>This value is calculated using SHA256 with value of authToken and secretCode as the encryption key.</td>
+    </tr>
+  </tbody>
+</Table>
 
 ::: tips
 ⚠️ Make sure to follow the correct spelling of the key.
@@ -30,65 +62,61 @@ Call this function to register FIDO token.
 ### 📬Sample POSTMAN collection in JSON
 
 ```json
-public static void main(String[] args) {
+}"item": [
+		{
+			"name": "token/add/",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+                            //value
+							"var userId ='user id';\r",
+                            "var tokenType ='token type';\r",
+                            "var credentialId ='credential id';\r",
+                            "var keyHandler ='key handler';\r",
+                            "var publicKey ='public key';\r"
+          
+                            //calculate cenToken	
+                            "var adminUsername = 'adminUsername';\r",				
+                            "var authToken ='authToken value';\r",
+							"var secretCode ='secretCode';r",
+							"var currentDate = Math.round(new Date().getTime()/1000);\r",
 
-	ClientConfig config = new DefaultClientConfig ();
-	Client client = Client.create ( config );
-	WebResource service = client.resource ("https://<domain_name>/CentagateWS/webresources");
-			
-	Gson gson = new Gson();
-	
-	String authToken = "{authToken}"
-	String adminUsername = "{adminUsername}";
-	String secretCode "{secretCode}";
-	String cenToken = convertHmacSha256(secretCode, adminUsername + authToken);
+							"var message = adminUsername + authToken ;\r",
+                            "var hash = CryptoJS.HmacSHA256(message, secretCode);\r",
+                            "var cenToken = CryptoJS.enc.Hex.stringify(hash);\r",
 
-	HashMap<String, String> map = new HashMap<String, String>();
-	map.put("userId", "userId");
-	map.put("tokenType", "tokenType");
-	map.put("credentialId", "credentialId");
-	map.put("keyHandler", "keyHandler");
-	map.put("publicKey", "publicKey");
-	map.put("cenToken", cenToken);  
-
-	ClientResponse response = service.path("token").path("add").path(adminUsername).path(cenToken).accept(MediaType.APPLICATION_JSON).put(ClientResponse.class, gson.toJson(map));
-				
-	String retJson = response.getEntity(String.class);
-
-	HashMap<String, Object> returnData = (HashMap<String, Object>) gson.fromJson(retJson, HashMap.class);
-
-	String code = returnData.get("code").toString();
-	String message = returnData.get("message").toString();
-	String object = returnData.get("object").toString();
-}
-
-public static String convertHmacSha256(String secretKey, String params) throws NoSuchAlgorithmException, 
-            InvalidKeyException,IllegalStateException, SignatureException, NoSuchProviderException, Exception
-{
-	try
-	{
-		final SecretKeySpec secret_key = new SecretKeySpec ( StringUtils.getBytesUtf8 ( secretKey ) , "HmacSHA256" );
-		final Mac mac = Mac.getInstance ( "HmacSHA256" );
-		mac.init ( secret_key );
-		final byte[] bytes = mac.doFinal ( StringUtils.getBytesUtf8 ( params ) );
-		return Hex.encodeHexString ( bytes );
-	}
-	catch ( NoSuchAlgorithmException e )
-	{
-		throw new NoSuchAlgorithmException ( e );
-	}
-	catch ( InvalidKeyException e )
-	{
-		throw new InvalidKeyException ( e );
-	}
-	catch ( IllegalStateException e )
-	{
-		throw new IllegalStateException ( e );
-	}
-	catch ( Exception e )
-	{
-		throw new Exception ( e );
-	}
+                            "postman.setEnvironmentVariable(\"userId\", username);\r",
+                            "postman.setEnvironmentVariable(\"tokenType\", username);\r",
+                            "postman.setEnvironmentVariable(\"credentialId\", username);\r",
+                            "postman.setEnvironmentVariable(\"keyHandler\", username);\r",
+  							"postman.setEnvironmentVariable(\"publicKey\", username);\r",
+                            "postman.setEnvironmentVariable(\"adminUsername\", adminUsername);\r",
+							"postman.setEnvironmentVariable(\"cenToken\", cenToken );"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n   \"userId\": \"{{userId}}\",\r\n    \"tokenType\": \"{{tokenType}}\",\r\n    \"credentialId\": \"{{credentialId}}\",\r\n    \"keyHandler\": \"{{keyHandler}}\",\r\n    \"publicKey\": \"{{publicKey}}\",\r\n   \"cenToken\": \"{{cenToken}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "https://{{host}}/CentagateWS/webresources/token/add/{{adminUsername}}/{{centoken}}"
+			},
+			"response": []
+		}
+]
 }
 ```
 
@@ -159,7 +187,7 @@ public static String convertHmacSha256(String secretKey, String params) throws N
 
 ### 🇯‌🇸‌ Sample Code in Node Js
 
-```nodejs
+```js
 const https = require('https')
 
 var crypto = require('crypto');
