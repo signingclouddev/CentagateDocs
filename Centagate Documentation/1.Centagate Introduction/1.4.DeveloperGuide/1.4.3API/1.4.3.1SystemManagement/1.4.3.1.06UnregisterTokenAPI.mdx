@@ -14,11 +14,42 @@ Call this function to register an offline OTP Token.
 
 
 ### 📏Parameters
-| KEY            | OCCURRENCES | DESCRIPTION                 |
-| -------------- | ----------- | --------------------------- |
-| username       | Required    | The user's username.        |
-| type           | Required    | The token type. 1 = Mobile Token, 2 = SMS Token, 3 = Challenge Respond Token, 4 = PKI|
-| cenToken       | Required    | This value is calculated using SHA256 with value of authToken and secretCode as the encryption key.|
+
+import Table from '@theme/Table';
+
+<Table>
+  <thead>
+    <tr>
+      <th>KEY</th>
+      <th>OCCURRENCES</th>
+      <th>DESCRIPTION</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>username</td>
+      <td>Required</td>
+      <td>The user’s username.</td>
+    </tr>
+    <tr>
+      <td>type</td>
+      <td>Required</td>
+      <td>
+The token type.
+
+- 1 = Mobile Token
+- 2 = SMS Token
+- 3 = Challenge Respond Token 
+- 4 = PKI
+      </td>
+    </tr>
+    <tr>
+      <td>cenToken</td>
+      <td>Required</td>
+      <td>The HMAC value is calculated using SHA-256 with secretCode as a key and plain text from admin username + authToken.</td>
+    </tr>
+  </tbody>
+</Table>
 
 ::: tips
 ⚠️ Make sure to follow the correct spelling of the key.
@@ -142,7 +173,7 @@ public static String convertHmacSha256(String secretKey, String params) throws N
 
 ### 🇯‌🇸‌ Sample Code in Node Js
 
-```nodejs
+```js
 const https = require('https')
 
 var crypto = require('crypto');
