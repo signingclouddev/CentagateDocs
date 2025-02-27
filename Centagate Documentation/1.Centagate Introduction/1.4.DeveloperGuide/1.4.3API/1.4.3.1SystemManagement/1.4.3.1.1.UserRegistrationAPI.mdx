@@ -13,18 +13,82 @@ Call this function to add an active user.
 
 
 ### 📏Parameters
-| KEY            | OCCURRENCES | DESCRIPTION                 |
-| -------------- | ----------- | --------------------------- |
-| firstName      | Required    | User’s first name.          |
-| lastName       | Required    | User’s last name.           |
-| username       | Required    | User’s username.            |
-| userApp        | Required    | User’s application ID.      |
-| userUniqueId   | Required    | User’s unique ID.           |
-| userClientId   | Required    | User’s client ID.           |
-| roles          | Required    | User’s roles. Role’s value : Company Admin = 2 , User = 3 , Group Admin = 4|
-| userGroup      | Required    | User’s group name. /> Example : />- default|
-| userEmail      | Required    | User’s valid email.         |
-| cenToken       | Required    | This value is calculated using SHA256 with value of authToken and secretCode as the encryption key.|
+
+import Table from '@theme/Table';
+
+<Table>
+  <thead>
+    <tr>
+      <th>KEY</th>
+      <th>OCCURRENCES</th>
+      <th>DESCRIPTION</th>
+    </tr>
+  </thead>
+  <tbody>
+  <tr>
+      <td>firstName</td>
+      <td>Required</td>
+      <td>User's first name.</td>
+    </tr>
+    <tr>
+      <td>lastName</td>
+      <td>Required</td>
+      <td>User's last name.</td>
+    </tr>
+    <tr>
+      <td>username</td>
+      <td>Required</td>
+      <td>User's username.</td>
+    </tr>
+    <tr>
+      <td>userApp</td>
+      <td>Required</td>
+      <td>User's application ID.</td>
+    </tr>
+    <tr>
+      <td>userUniqueId</td>
+      <td>Required</td>
+      <td>User's unique ID.</td>
+    </tr>
+    <tr>
+      <td>userClientId</td>
+      <td>Required</td>
+      <td>User's client ID.</td>
+    </tr>
+    <tr>
+      <td>roles</td>
+      <td>Required</td>
+      <td>
+
+Role’s value : 
+- Company Admin = 2
+- User = 3
+- Group Admin = 4
+      </td>
+    </tr>
+    <tr>
+      <td>userGroup</td>
+      <td>Required</td>
+      <td>User’s group name.
+
+Example: 
+- default
+</td>
+    </tr>
+    <tr>
+      <td>userEmail</td>
+      <td>Required</td>
+      <td>User's valid email.</td>
+    </tr>
+    <tr>
+      <td>cenToken</td>
+      <td>Required</td>
+      <td>This value is calculated using SHA256 with value of authToken and secretCode as the encryption key.</td>
+    </tr>
+  </tbody>
+</Table>
+
+
 
 ::: tips
 ⚠️ Make sure to follow the correct spelling of the key.
