@@ -14,12 +14,47 @@ Call this function to register an active SMS or OTP token.
 
 
 ### 📏Parameters
-| KEY            | OCCURRENCES | DESCRIPTION                 |
-| -------------- | ----------- | --------------------------- |
-| username       | Required    | Targeted username.          |
-| tokenSn        | Required    | Token serial number.        |
-| tokenType      | Required    | Token type. SMS = 1, OTP = 2|
-| cenToken       | Required    | This value is calculated using SHA256 with value of authToken and secretCode as the encryption key.|
+
+import Table from '@theme/Table';
+<Table>
+  <thead>
+    <tr>
+      <th>KEY</th>
+      <th>OCCURRENCES</th>
+      <th>DESCRIPTION</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>username</td>
+      <td>Required</td>
+      <td>Targeted username.</td>
+    </tr>
+    <tr>
+    <tr>
+      <td>tokenSn</td>
+      <td>Required</td>
+      <td>Token serial number.</td>
+    </tr>
+    <tr>
+      <td>tokenType</td>
+      <td>Required</td>
+      <td>
+Token type.
+
+Type available to choose:
+- 1 = SMS Token
+- 2 = OTP Token
+      </td>
+    </tr>
+    <tr>
+      <td>cenToken</td>
+      <td>Required</td>
+      <td>This value is calculated using SHA256 with value of authToken and secretCode as the encryption key.</td>
+    </tr>
+  </tbody>
+</Table>
+
 
 ::: tips
 ⚠️ Make sure to follow the correct spelling of the key.
