@@ -1,16 +1,16 @@
 ---
-title: ❓Request Number of Question to Reset API
+title: 💡Reset User Question & Answers
 ---
 
-# ❓Request Number of Question to Reset API
+# 💡Reset User Question & Answers
 
-Call this function to know how many questions need to be reset.
+Call this API to reset user’s question and answers security measures.
 
 ### 🔍 URL
 
 | **METHOD**   | **PATH**                                                                      | 
 | ------------ | ----------------------------------------------------------------------------- | 
-| PUT          | {{host}}/CentagateWS/webresources/security/getNumOfQuestionsToSetBPI          |
+| PUT          | {{host}}/CentagateWS/webresources/security/resetQaBPI/{{adminUsername}}       |
 
 
 ### 📏Parameters
@@ -65,7 +65,7 @@ MDpRdWVzdDE6SGVsbG8gV29ybGQsMjo6Rm9vMTIz</td>
 ```json
 }"item": [
 		{
-			"name": "getNumOfQuestionsToSetBPI",
+			"name": "resetQaBPI",
 			"event": [
 				{
 					"listen": "prerequest",
@@ -73,9 +73,9 @@ MDpRdWVzdDE6SGVsbG8gV29ybGQsMjo6Rm9vMTIz</td>
 						"exec": [
                             //value
 							"var username ='user's username';\r",
-                             "var data ='list of questions';\r"
-
-  							//calculate cenToken					
+							"var data ='question and answer data';\r"
+          
+                            //calculate cenToken					
                             "var adminUsername ='admin's username';\r",
                             "var authToken ='authToken value';\r",
 							"var secretCode='secretCode';r",
@@ -86,7 +86,8 @@ MDpRdWVzdDE6SGVsbG8gV29ybGQsMjo6Rm9vMTIz</td>
                             "var cenToken = CryptoJS.enc.Hex.stringify(hash);\r",
 
   							"postman.setEnvironmentVariable(\"username\", username);\r",
-                            "postman.setEnvironmentVariable(\"data\", data);\r",
+							"postman.setEnvironmentVariable(\"data\", data);\r",
+                            "postman.setEnvironmentVariable(\"adminUsername\", adminUsername);\r",
 							"postman.setEnvironmentVariable(\"cenToken\", cenToken);"
 						],
 						"type": "text/javascript",
@@ -99,14 +100,14 @@ MDpRdWVzdDE6SGVsbG8gV29ybGQsMjo6Rm9vMTIz</td>
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"username\": \"{{username}}\",\r\n   \"data\": \"{{data}}\",\r\  \"cenToken\": \"{{cenToken}}\"\r\n}",
+					"raw": "{\r\n    \"username\": \"{{username}}\",\r\n    \"tokenSn\": \"{{tokenSn}}\",\r\n    \"tokenType\": \"{{tokenType}}\",\r\n  \"cenToken\": \"{{cenToken}}\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
 						}
 					}
 				},
-				"url": "https://{{host}}/CentagateWS/webresources/security/getNumOfQuestionsToSetBPI"
+				"url": "https://{{host}}/CentagateWS/webresources/security/resetQaBPI/{{adminUsername}}"
 			},
 			"response": []
 		}
@@ -124,11 +125,18 @@ public static void main(String[] args) {
 	WebResource service = client.resource ("https://<domain_name>/CentagateWS/webresources");
 			
 	Gson gson = new Gson();
+	
+	String authToken = "{authToken}"
+	String adminUsername = "{adminUsername}";
+	String secretCode "{secretCode}";
+	String cenToken = convertHmacSha256(secretCode, adminUsername + authToken);
 
 	HashMap<String, String> map = new HashMap<String, String>();
-	map.put("username", "username");  
+	map.put("username", "username");
+	map.put("data", "data");
+	map.put("cenToken", cenToken);  
 
-	ClientResponse response = service.path("security").path("getNumOfQuestionsToSetBPI").accept(MediaType.APPLICATION_JSON).put(ClientResponse.class, gson.toJson(map));
+	ClientResponse response = service.path("security").path("resetQaBPI").path(adminUsername).accept(MediaType.APPLICATION_JSON).put(ClientResponse.class, gson.toJson(map));
 				
 	String retJson = response.getEntity(String.class);
 
@@ -138,6 +146,35 @@ public static void main(String[] args) {
 	String message = returnData.get("message").toString();
 	String object = returnData.get("object").toString();
 }
+
+public static String convertHmacSha256(String secretKey, String params) throws NoSuchAlgorithmException, 
+            InvalidKeyException,IllegalStateException, SignatureException, NoSuchProviderException, Exception
+{
+	try
+	{
+		final SecretKeySpec secret_key = new SecretKeySpec ( StringUtils.getBytesUtf8 ( secretKey ) , "HmacSHA256" );
+		final Mac mac = Mac.getInstance ( "HmacSHA256" );
+		mac.init ( secret_key );
+		final byte[] bytes = mac.doFinal ( StringUtils.getBytesUtf8 ( params ) );
+		return Hex.encodeHexString ( bytes );
+	}
+	catch ( NoSuchAlgorithmException e )
+	{
+		throw new NoSuchAlgorithmException ( e );
+	}
+	catch ( InvalidKeyException e )
+	{
+		throw new InvalidKeyException ( e );
+	}
+	catch ( IllegalStateException e )
+	{
+		throw new IllegalStateException ( e );
+	}
+	catch ( Exception e )
+	{
+		throw new Exception ( e );
+	}
+}
 ```
 
 ### 🇯‌🇸‌ Sample Code in Node Js
@@ -146,16 +183,32 @@ public static void main(String[] args) {
 const https = require('https')
 
 var crypto = require('crypto');
-var username = "<username>";    
+var username = "<username>";
+var data = "<data>";
+
+var adminUsername = "<adminUsername>";
+var authToken = "<authToken>";
+var secretCode = "<secretCode>";
+  
+var cenTokenText = adminUsername + authToken;
+var hash, cenToken;
+
+/* generate cenToken value*/
+cenToken = crypto.createHmac(sha256, secretCode);    
+cenToken.write(cenTokenText);
+cenToken.end();      
+hash = cenToken.read().toString('hex');    
 
 const data = JSON.stringify({
-	username: username
+	username: username,
+	data: data,
+	cenToken: hash
 })
 
 const options = {
 	hostname: "<domain_name>",
 	port: 443,
-	path:'/CentagateWS/webresources/security/getNumOfQuestionsToSetBPI',
+	path:'/CentagateWS/webresources/security/resetQaBPI/'+adminUsername,
 	method: 'PUT',
 	headers: {
 		'Accept': 'application/json',
@@ -196,14 +249,36 @@ req.end()
 
 ```python
 #Configuration
-ADMINUSE{RNAME = {{adminUsername}}
-HOST = {host}}
-ENDPOINT = "/CentagateWS/webresources/security/getNumOfQuestionsToSetBPI"
-USERNAME ={{username}}
+ADMINUSERNAME = {{adminUsername}}
+HOST = {{host}}
+ENDPOINT = "/CentagateWS/webresources/security/resetQaBPI/" + ADMINUSERNAME
+USERNAME = {{username}}
+SECRET_CODE = {{secretCode}}
+AUTH_TOKEN = {{authToken}} 
+
+
+# Centoken calculation
+MESSAGE = ADMINUSERNAME + AUTH_TOKEN
+CENTOKEN = hmac.new(SECRET_CODE.encode(), MESSAGE.encode(), hashlib.sha256).hexdigest()
+
+#Convert data to Based64
+qa_list = [
+    (0, "Quest1", "Hello World"),
+    (2, "", "Foo123")
+]
+
+# Convert list of questions and answers to the specified format
+formatted_qa = "::".join([f"{q[0]}:{q[1]}:{q[2]}" for q in qa_list])
+
+# Encode the formatted string in Base64
+DATA = base64.b64encode(formatted_qa.encode()).decode()
+
 
 # JSON Payload
 payload = json.dumps({
-    "username": USERNAME
+    "username": USERNAME,
+    "data": DATA,
+    "cenToken": CENTOKEN
 })
 
 # Headers
@@ -229,15 +304,23 @@ except Exception as e:
 
 ```php
 <?php
-
-    $url = 'https://<domain_name>/CentagateWS/webresources/security/getNumOfQuestionsToSetBPI';
+    $adminUsername = "<adminUsername>";
+    $url = 'https://<domain_name>/CentagateWS/webresources/security/resetQaBPI/'.$adminUsername;
     
     $ch = curl_init($url);
     
     $username = "<username>";
+    $data = "<data>";
+    
+    $secretCode = "<secretCode>";
+    $authToken = "<authToken>";
+    $cenToken_text = $adminUsername.$authToken;
+    $cenToken = hash_hmac('sha256', $cenToken_text, $secretCode); // calculate cenToken value
     
     $jsonData = array (
-    	'username'=> $username
+    	'username'=> $username,
+    	'data'=> $data,
+    	'cenToken' => $cenToken
     );
     
     $jsonDataEncoded = json_encode($jsonData);
