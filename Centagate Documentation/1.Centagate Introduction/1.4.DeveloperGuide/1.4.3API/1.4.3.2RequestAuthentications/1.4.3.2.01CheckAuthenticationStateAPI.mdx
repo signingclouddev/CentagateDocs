@@ -18,7 +18,7 @@ Call this function to check the out-of-band authentication status (QR Code, Mobi
 | -------------- | ----------- | --------------------------- |
 | username       | Required    | The user's username.        |
 | authMethod     | Required    | The mobile number of the Hardware Token Serial Number. This is mandatory for token-type SMS and OTP. (For the OTP token type, make sure the token is not bound to any user and the token status is in DEACTIVATE status. |
-| authToken      | Optional    | The token type. SMS = 1, OTP = 2. |
+| authToken      | Optional    | The Previous generated authToken. |
 | integrationKey | Required    | The integration key is retrieved from app.|
 | unixTimestamp  | Required    | User’s current time in Unix timestamp.|
 | supportFido    | Optional    | FIDO Authentication Options, Pass True To Enable And False To Disable. Or Leave It Empty.|
