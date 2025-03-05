@@ -1,0 +1,63 @@
+---
+title: 📱CR OTP Authentication API
+---
+
+# 📱CR OTP Authentication API
+
+Authentication function that verifies username and Challenge Response OTP combination. User has to request an OTP challenge code before calling this function. User will generate a correspond OTP based on the challenge code. 
+
+### 🔍 URL
+
+| **METHOD**   | **PATH**                                                                      | 
+| ------------ | ----------------------------------------------------------------------------- | 
+| POST         |  /v2/CentagateWS/webresources/auth/authCrOtp                                  |
+
+
+### 📏Parameters
+| KEY            | OCCURRENCES | DESCRIPTION                 |
+| -------------- | ----------- | --------------------------- |
+| username       | Required    | The user's username.        |
+| authToken      | Optional    | The Previous generated authToken.|
+| integrationKey | Optional    | The integration key of the App.|
+| unixTimestamp  | Required    | User’s current time in Unix timestamp.|
+| supportFido    | Optional    | FIDO Authentication Option, Pass True to Enable and False to Disable. Or Leave It Empty.|
+| ipAddress      | Optional    | User’s current IP Address.  |
+| userAgent      | Optional    | Platform Information of Authentication Request Is Made Of.|
+| browserFp      | Optional    | User’s current browser fingerprint.|
+| hmac           | Required    | Hmac Generated From Combination (Username + DevAccId + CrOtp + OtpType + Challenge + IntegrationKey + UnixTimeStamp + AuthToken + SupportFido + IpAddress + UserAgent + BrowserFp) Using Secretkey (Can Be Obtained From The App Page) As The Key.|
+
+
+
+::: tips
+⚠️ Make sure to follow the correct spelling of the key.
+:::
+
+### 📬Sample POSTMAN collection in JSON
+
+```json
+
+```
+
+### ♨️Sample Code in JAVA
+
+```java
+
+```
+
+### 🇯‌🇸‌ Sample Code in Node Js
+
+```js
+
+```
+
+### 🐍 Sample Code in Python
+
+```python
+
+```
+
+### 🐘 Sample Code in PHP
+
+```php
+
+```
