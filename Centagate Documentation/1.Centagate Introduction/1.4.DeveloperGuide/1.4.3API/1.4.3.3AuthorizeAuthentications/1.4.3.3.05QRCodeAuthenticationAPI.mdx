@@ -1,0 +1,406 @@
+---
+title: 🕵🏻 QR Code Authentication API
+---
+
+# 🕵🏻 QR Code Authentication API
+
+Authentication function that verifies username and QR. User has to request a QR code before calling this function. You have to convert the QR code value to a QR and display on the screen to let user scans it.
+
+### 🔍 URL
+
+| **METHOD**   | **PATH**                                                                      | 
+| ------------ | ----------------------------------------------------------------------------- | 
+| POST         | /v2/CentagateWS/webresources/auth/authQrCode                                  |
+
+
+### 📏Parameters
+| KEY            | OCCURRENCES | DESCRIPTION                 |
+| -------------- | ----------- | --------------------------- |
+| username       | Required    | The user's username.        |
+| devAccId       | Required    | The device account ID.      |
+| tokenId        | Required    | Challenge Code That Is Sent from Server to User.|
+| otpType        | Required    | The OTP Type.               |
+| otp            | Required    | OTP Generate After Scan QR Code Using CENTAGATE Cloud App in Offline Mode.|
+| challenge      | Required    | The OTP Challenge in Response Object.|
+| details        | Required    | The Transaction Information Based on Requested QR Code Encoded Using Base64.         |      
+| authToken      | Optional    | The previously generated Auth Token.|
+| integrationKey | Optional    | The integration key of the App.|
+| unixTimestamp  | Required    | User’s current time in Unix timestamp.|
+| supportFido    | Optional    | FIDO Authentication Option, Pass True to Enable and False to Disable. Or Leave It Empty.|
+| ipAddress      | Optional    | User’s current IP Address.  |
+| userAgent      | Optional    | Platform Information of Authentication Request Is Made Of.|
+| browserFp      | Optional    | User’s current browser fingerprint.|
+| hmac           | Required    |Hmac Generated From Combination (username + devAccId + otp + challenge + details + integrationKey + unixTimeStamp + authToken + supportFido + ipAddress + browserFp + userAgent) Using Secretkey (Can Be Obtained From The App Page) As The Key​.|
+
+
+
+::: tips
+⚠️ Make sure to follow the correct spelling of the key.
+:::
+
+### 📬Sample POSTMAN collection in JSON
+
+```json
+}"item": [
+		{
+			"name": "/auth/authQrCode",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+                            //value
+							"var username ='user's username';\r",
+							"var devAccId ='device id';\r",
+                            "var otpType ='OTP type';\r",
+                            "var otp ='generated otp';\r",
+                            "var challenge ='generated code';\r",
+                            "var details ='transaction details';\r",
+                            "var authToken ='generated auth token';\r",
+                            "var supportFido ='FIDO option';\r",
+                            "var secretKey ='app secret key';\r",
+							"var unixTimestamp ='local unixtimestamp';\r"
+
+                             //calculate HMAC SHA256 of request parameter using secretKey
+                            "var message = username + devAccId + otpType + otp + challenge + details + authToken + supportFido + unixTimestamp;\r",
+                            "var hash = CryptoJS.HmacSHA256(message, secretKey);\r",
+                            "var hmac = CryptoJS.enc.Hex.stringify(hash);\r"
+
+  							"postman.setEnvironmentVariable(\"username \", username);\r",
+							"postman.setEnvironmentVariable(\"devAccId\", devAccId);\r",
+                            "postman.setEnvironmentVariable(\"otpType\", otpType);\r",
+                            "postman.setEnvironmentVariable(\"otp\", otp);\r",
+                            "postman.setEnvironmentVariable(\"challenge\", challenge);\r",
+                            "postman.setEnvironmentVariable(\"details\", details);\r",
+                            "postman.setEnvironmentVariable(\"authToken\", authToken);\r",
+                            "postman.setEnvironmentVariable(\"supportFido\", supportFido);\r",
+                            "postman.setEnvironmentVariable(\"unixTimestamp\", unixTimestamp);",
+                            "postman.setEnvironmentVariable(\"hmac\", hmac);"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\": \"{{username}}\",\r\n    \"devAccId\": \"{{devAccId}}\",\r\n  \"otpType\": \"{{otpType}}\",\r\n   \"otp\": \"{{otp}}\",\r\n   \"challenge\": \"{{challenge}}\",\r\n   \"details\": \"{{details}}\",\r\n   \"authToken\": \"{{authToken}}\",\r\n   \"supportFido\": \"{{supportFido}}\",\r\n    \"unixTimestamp\": \"{{unixTimestamp}}\",\r\n  \"hmac\": \"{{hmac}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "https://{{host}}/v2/CentagateWS/webresources/auth/authQrCode"
+			},
+			"response": []
+		}
+]
+}
+```
+
+### ♨️Sample Code in JAVA
+
+```java
+public static void main(String[] args) {
+
+	ClientConfig config = new DefaultClientConfig ();
+	Client client = Client.create ( config );
+	WebResource service = client.resource ("https://<domain_name>/v2/CentagateWS/webresources");
+			
+	Gson gson = new Gson();
+			
+	String hmac = convertHmacSha256("secretkey","username" + "devAccId" + "otp" + "challenge" + "details" + "authToken" + "integrationKey" + "unixTimestamp" + "supportFido" + "ipAddress" + "userAgent" + "browserFp");
+
+	HashMap<String, String> map = new HashMap<String, String>();
+	map.put("username", "username");
+	map.put("devAccId", "devAccId");
+	map.put("tokenId", "tokenId");
+    map.put("OtpType", "online");
+	map.put("otp", "otp");
+	map.put("challenge", "challenge");
+	map.put("details", "details");
+	map.put("authToken", "authToken");
+	map.put("integrationKey", "integrationKey");
+	map.put("unixTimestamp", "unixTimeStamp");
+	map.put("ipAddress", "ipAddress"); 
+	map.put("userAgent", "userAgent"); 
+	map.put("browserFp", "browserFp"); 
+	map.put("supportFido", ""); 
+	map.put("hmac", hmac); 
+
+	ClientResponse response = service.path ("auth").path("authQrCode").accept(MediaType.APPLICATION_JSON).post(ClientResponse.class, gson.toJson(map));
+				
+	String retJson = response.getEntity(String.class);
+
+	HashMap<String, Object> returnData = (HashMap<String, Object>) gson.fromJson(retJson, HashMap.class);
+
+	String code = returnData.get("code").toString();
+	String message = returnData.get("message").toString();
+	String object = returnData.get("object").toString();
+}
+
+public static String convertHmacSha256(String secretKey, String params) throws NoSuchAlgorithmException, 
+            InvalidKeyException,IllegalStateException, SignatureException, NoSuchProviderException, Exception
+{
+	try
+	{
+		final SecretKeySpec secret_key = new SecretKeySpec ( StringUtils.getBytesUtf8 ( secretKey ) , "HmacSHA256" );
+		final Mac mac = Mac.getInstance ( "HmacSHA256" );
+		mac.init ( secret_key );
+		final byte[] bytes = mac.doFinal ( StringUtils.getBytesUtf8 ( params ) );
+		return Hex.encodeHexString ( bytes );
+	}
+	catch ( NoSuchAlgorithmException e )
+	{
+		throw new NoSuchAlgorithmException ( e );
+	}
+	catch ( InvalidKeyException e )
+	{
+		throw new InvalidKeyException ( e );
+	}
+	catch ( IllegalStateException e )
+	{
+		throw new IllegalStateException ( e );
+	}
+	catch ( Exception e )
+	{
+		throw new Exception ( e );
+	}
+}
+```
+
+### 🇯‌🇸‌ Sample Code in Node Js
+
+```js
+const https = require('https')
+
+var crypto = require('crypto');
+var username = '<username>';
+var devAccId = '<devAccId>';
+var tokenId = '<tokenId>';
+var OtpType = 'online';
+var otp = '<otp>';
+var challenge = '<challenge>';
+var details = '<details>';
+var integrationKey = '<integration key>';
+
+var time = Math.round((new Date()).getTime() / 1000);
+var unixTimestamp = time.toString();
+var authToken = "<authToken>";
+
+var supportFido = "<supportFido>";
+var ipAddress = "<ipAddress>";
+var userAgent = "<userAgent>";
+var browserFp = "<browserFp>";
+
+var secretKey    = '<secret key>';  
+var hmacText = username + devAccId + otp + challenge + details + authToken + integrationKey + unixTimestamp + supportFido + ipAddress + userAgent + browserFp;
+var hash, hmac;
+
+/* generate hmac value*/
+hmac = crypto.createHmac(sha256, secretKey);    
+hmac.write(hmacText);
+hmac.end();      
+hash = hmac.read().toString('hex');    
+
+
+const data = JSON.stringify({
+	username: username,
+	devAccId: devAccId,
+	tokenId : tokenId,
+	OtpType : OtpType,
+	otp: otp,
+	challenge: challenge,
+	details: details,
+	authToken: authToken,
+	integrationKey: integrationKey,
+	unixTimestamp: unixTimestamp,
+	ipAddress: ipAddress,
+	supportFido: supportFido,
+	userAgent: userAgent,
+	browserFp: browserFp,
+	hmac: hash
+})
+
+const options = {
+	hostname: "<domain_name>",
+	port: 443,
+	path:'/v2/CentagateWS/webresources/auth/authQrCode',
+	method: 'POST',
+	headers: {
+		'Accept': 'application/json',
+		'Content-Type': 'application/json',
+	}
+}
+
+const req = https.request(options, res =>{
+	console.log(`HTTP Status Code: ${res.statusCode}`)
+	var body = '';
+	res.on('data', function(d){
+		
+	body += d;
+	var parsed = JSON.parse(body);
+	
+	if (parsed.code == 0){
+	   console.log('Authentication Succeed');
+	   console.log('Response:');
+	   console.log(body);
+	}
+	else {
+	  console.log('Authentication Fail, ' +'Message:' + parsed.message);
+	  console.log('Code:' + parsed.code); 
+	}
+		
+	})
+})
+
+req.on('ERROR', error => {
+	console.error(error)
+})
+
+req.write(data)
+req.end()
+```
+
+### 🐍 Sample Code in Python
+
+```python
+#Param values
+USERNAME = {{username}}
+DEVACCID = {{devAccId}}
+TOKENID = {{tokenId}}
+OTPTYPE = {{otpType}}
+OTP = {{otp}}
+CHALLENGE = {{challenge}}
+DETAILS = {{details}}
+AUTHTOKEN = {{authToken}}
+INTEGRATIONKEY = {{integrationKey}}
+UNIXTIMESTAMP = int(time.time())
+SUPPORTFIDO = {{supportFido}}
+IPADDRESS = {{ipAddress}}
+USERAGENT = {{userAgent}}
+BROWSERFP = {{browserFp}}
+SECRETKEY = {{secretKey}}
+
+#calculate HMAC 
+message = (USERNAME + DEVACCID + OTP + CHALLENGE + DETAILS + INTEGRATIONKEY +  str(UNIXTIMESTAMP) + AUTHTOKEN + SUPPORTFIDO + IPADDRESS + USERAGENT + BROWSERFP)
+
+#convert to bytes
+secret_key_bytes = bytes(SECRETKEY, 'utf-8')
+message_bytes = bytes(message, 'utf-8')
+
+#HMAC SHA-256
+hash = hmac.new(secret_key_bytes, message_bytes, hashlib.sha256)
+HMAC = hash.hexdigest()
+
+conn = http.client.HTTPSConnection({{host}}, context=context)
+payload = json.dumps({
+  "username": USERNAME,
+  "devAccId": DEVACCID,
+  "tokenId": TOKENID,
+  "otpType": OTPTYPE,
+  "opt":OTP,
+  "challenge": CHALLENGE,
+  "details": DETAILS,
+  "authToken": AUTHTOKEN,
+  "integrationKey": INTEGRATIONKEY,
+  "unixTimestamp": str(UNIXTIMESTAMP),
+  "supportFido": SUPPORTFIDO,
+  "ipAddress": IPADDRESS,
+  "userAgent": USERAGENT,
+  "browswerFp": BROWSERFP,
+  "hmac": HMAC
+})
+headers = {
+  'Content-Type': 'application/json'
+}
+conn.request("POST", "/v2/CentagateWS/webresources/auth/authQrCode", payload, headers)
+res = conn.getresponse()
+data = res.read()
+print(data.decode("utf-8"))
+```
+
+### 🐘 Sample Code in PHP
+
+```php
+<?php
+
+    $url = 'https://<domain_name>/v2/CentagateWS/webresources/auth/authQrCode';
+    
+    $ch = curl_init($url);
+    $secretKey = "<secretkey>";
+    $username ="<username>";
+    $devAccId = "<devAccId>";
+    $tokenId = "<token_Id>";
+    $OtpType = "online";
+    $otp = "<otp>";
+    $challenge = "<challenge>";
+    $details = "<details>";
+    $integrationKey = "<integrationkey>";
+    $time = time(); // get current timestamp
+    $unixTimestamp = strval($time); //convert timestamp to String
+    $authToken = "<authToken>";
+    $supportFido = "<supportFido>";
+    $ipAddress = "<ipAddress>";
+    $userAgent = "<userAgent>";
+    $browserFp = "<browserFp>";
+    
+    $hmac_text = $username.$devAccId.$otp.$challenge.$details.$authToken.$integrationKey.$unixTimestamp.$supportFido.$ipAddress.$userAgent.$browserFp;
+    $hmac = hash_hmac('sha256', $hmac_text, $secretKey); // calculate hmac value
+    
+    $jsonData = array (
+    	'username'=> $username,
+    	'devAccId'=> $devAccId,
+    	'tokenId' => $tokenId,
+    	'OtpType' => $OtpType,
+    	'otp'=> $otp,
+    	'challenge'=> $challenge,
+    	'details'=> $details,
+    	'authToken'=> $authToken,
+    	'integrationKey'=> $integrationKey,
+    	'unixTimestamp'=> $unixTimestamp,
+    	'supportFido'=> $supportFido,
+    	'ipAddress'=> $ipAddress,
+    	'userAgent'=> $userAgent,
+    	'browserFp'=> $browserFp,
+    	'hmac' => $hmac
+    	
+    );
+    
+    $jsonDataEncoded = json_encode($jsonData);
+    
+    curl_setopt($ch, CURLOPT_POST,1);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $jsonDataEncoded);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, array('Accept: application/json','Content-Type: application/json'));
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    
+    $result = curl_exec($ch);
+    
+    
+    $obj = json_decode($result); 
+    if ($obj->{'code'} != 0){
+    	print "Authentication fail";
+    	print "Message: ".$obj->{'message'}; 
+    	echo " <br>"; 
+    	print "Code: ".$obj->{'code'};
+    }
+    else {
+    	print "Authentication succeed";
+    	echo " <br>"; 
+    	print "Message: ".$obj->{'message'}; 
+    	echo " <br>"; 
+    	print "Code: ".$obj->{'code'}; 
+    	echo " <br>"; 
+    	print "Result:" ;
+    	echo " <br>"; 
+    	print $result;
+    }
+    
+    curl_close($ch);
+
+?>
+```
