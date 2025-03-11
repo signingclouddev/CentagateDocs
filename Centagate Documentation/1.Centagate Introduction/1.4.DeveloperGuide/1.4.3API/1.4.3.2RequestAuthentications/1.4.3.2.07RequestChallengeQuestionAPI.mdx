@@ -10,21 +10,21 @@ Return list of question that need to be answer during security question authenti
 
 | **METHOD**   | **PATH**                                                                      | 
 | ------------ | ----------------------------------------------------------------------------- | 
-| POST         |  /v2/CentagateWS/webresources/req/kba/getQuestions                            |
+| POST         |  [host]/v2/CentagateWS/webresources/req/kba/getQuestions                      |
 
 
 ### 📏Parameters
 | KEY            | OCCURRENCES | DESCRIPTION                 |
 | -------------- | ----------- | --------------------------- |
 | username       | Required    | The user's username.        |
-| authToken      | Optional    | The Previous generated authToken.|
+| authToken      | Optional    | The previous generated authToken.|
 | integrationKey | Optional    | The integration key of the App.|
-| unixTimestamp  | Required    | User’s current time in Unix timestamp.|
-| supportFido    | Optional    | FIDO Authentication Option, Pass True to Enable and False to Disable. Or Leave It Empty.|
+| unixTimestamp  | Required    | User’s current time in unix timestamp.|
+| supportFido    | Optional    | FIDO authentication option, pass **True** to enable and **False** to disable or leave it empty.|
 | ipAddress      | Optional    | User’s current IP Address.  |
 | userAgent      | Optional    | Platform Information of Authentication Request Is Made Of.|
 | browserFp      | Optional    | User’s current browser fingerprint.|
-| hmac           | Required    | Hmac Generated from Combination (Username + AuthToken + UserAgent + IntegrationKey + SupportFido + BrowserFp + UnixTimeStamp + IpAddress) Using Secretkey (Can Be Obtained from the App Page) As the Key.|
+| hmac           | Required    | Hmac generated from combination (username + authToken + userAgent + integrationKey + supportFido + browserFp + unixTimeStamp + ipAddress) using Secretkey (Can be obtained from the App page) as the key.|
 
 
 ::: tips
@@ -42,21 +42,21 @@ Return list of question that need to be answer during security question authenti
 					"listen": "prerequest",
 					"script": {
 						"exec": [
-                            //value
+                            				//value
 							"var username ='user's username';\r",
-                            "var integrationKey ='app integration key';\r",
-                            "var secretKey ='app secret key';\r",
+                            				"var integrationKey ='app integration key';\r",
+                            				"var secretKey ='app secret key';\r",
 							"var unixTimestamp ='local unixtimestamp';\r"
 
-                             //calculate HMAC SHA256 of request parameter using secretKey
-                            "var message = username + devAccId + integrationKey + unixTimestamp;\r",
-                            "var hash = CryptoJS.HmacSHA256(message, secretKey);\r",
-                            "var hmac = CryptoJS.enc.Hex.stringify(hash);\r"
+                             				//calculate HMAC SHA256 of request parameter using secretKey
+                            				"var message = username + devAccId + integrationKey + unixTimestamp;\r",
+                            				"var hash = CryptoJS.HmacSHA256(message, secretKey);\r",
+                            				"var hmac = CryptoJS.enc.Hex.stringify(hash);\r"
 
   							"postman.setEnvironmentVariable(\"username \", username);\r",
 							"postman.setEnvironmentVariable(\"integrationKey\", integrationKey);",
-                            "postman.setEnvironmentVariable(\"unixTimestamp\", unixTimestamp);",
-                            "postman.setEnvironmentVariable(\"hmac\", hmac);"
+                            				"postman.setEnvironmentVariable(\"unixTimestamp\", unixTimestamp);",
+                            				"postman.setEnvironmentVariable(\"hmac\", hmac);"
 						],
 						"type": "text/javascript",
 						"packages": {}
@@ -68,7 +68,7 @@ Return list of question that need to be answer during security question authenti
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"username\": \"{{username}}\",\r\n  \"integrationKey\": \"{{integrationKey}}\",\r\n    \"unixTimestamp\": \"{{unixTimestamp}}\",\r\n  \"hmac\": \"{{hmac}}\"\r\n}",
+					"raw": "{\r\n    \"username\": \"{{username}}\",\r\n  \"integrationKey\": \"{{integrationKey}}\",\r\n    \"unixTimestamp\": \"									{{unixTimestamp}}\",\r\n  \"hmac\": \"{{hmac}}\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -81,6 +81,8 @@ Return list of question that need to be answer during security question authenti
 		}
 ]
 ```
+
+
 
 ### ♨️Sample Code in JAVA
 
@@ -147,6 +149,8 @@ public static String convertHmacSha256(String secretKey, String params) throws N
 	}
 }
 ```
+
+
 
 ### 🇯‌🇸‌ Sample Code in Node Js
 
@@ -228,6 +232,8 @@ req.write(data)
 req.end()
 ```
 
+
+
 ### 🐍 Sample Code in Python
 
 ```python
@@ -274,6 +280,8 @@ res = conn.getresponse()
 data = res.read()
 print(data.decode("utf-8"))
 ```
+
+
 
 ### 🐘 Sample Code in PHP
 
