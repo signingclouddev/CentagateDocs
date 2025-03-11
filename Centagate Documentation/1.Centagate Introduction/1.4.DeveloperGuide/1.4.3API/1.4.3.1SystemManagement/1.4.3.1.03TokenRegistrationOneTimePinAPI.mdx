@@ -1,38 +1,39 @@
 ---
-title: 🔏 Token Registration API
+title:🔏Token Registration (One Time Pin) API
 ---
 
-# 🔏 Token Registration API
+# 🔏Token Registration (One Time Pin) API
 
-Call this function to register an active SMS or OTP token.
+Call this function to register at One Time PIN token. You can specify the token status during the registration.
 
 ### 🔍 URL
 
 | **METHOD**   | **PATH**                                                                      | 
 | ------------ | ----------------------------------------------------------------------------- | 
-| PUT          | {{host}}CentagateWS/webresources/cert/register/pkcs7/{{adminUsername}}        |
+| PUT          | [host]/CentagateWS/webresources/device/register/onetimepin/[adminUsername]    |
 
 
 ### 📏Parameters
 | KEY            | OCCURRENCES | DESCRIPTION                 |
 | -------------- | ----------- | --------------------------- |
 | username       | Required    | The user's username.        |
-| signature      | Required    | The PKCS#7 attached signature encoded in Base64|
-| algorithm      | Optional    | The algorithm used during the signing. Valid values are: 0: SHA-1, 1: SHA-256, 2: SHA-384, 3: SHA-512|
-| timestamp      | Required    | Unix timestamp in milliseconds when the user registers the certificate. The server will reject the request if the request is 5 minutes more or less than the current server time.|
-| status         | Required    | Token type. SMS = 1, OTP = 2|
+| status         | Required    | Token status : **1 = pending** or **2 = valid** or **3 = temporarily deactivated** or **4 = deactivated** .|
+| validity       | Optional    | Specify the validity of the SMS code. In seconds. If this value is not set, a default of 5 minutes will be used.|
 | cenToken       | Required    | This value is calculated using SHA256 with value of authToken and secretCode as the encryption key.|
 
 ::: tips
 ⚠️ Make sure to follow the correct spelling of the key.
 :::
 
+
+
 ### 📬Sample POSTMAN collection in JSON
+
 
 ```json
 }"item": [
 		{
-			"name": "register/pkcs7",
+			"name": "register",
 			"event": [
 				{
 					"listen": "prerequest",
@@ -40,10 +41,8 @@ Call this function to register an active SMS or OTP token.
 						"exec": [
                             //value
 							"var username ='user's username';\r",
-							"var signature ='attached signature';\r",
-                            "var algorithm ='algorithm used';\r",
-                            "var timestamp ='algorithm used';\r",
-                            "var status ='algorithm used';\r"
+							"var status ='token status';\r",
+                            "var validity ='token validity';\r"
           
                             //calculate cenToken					
                             "var authToken ='authToken value';\r",
@@ -55,10 +54,8 @@ Call this function to register an active SMS or OTP token.
                             "var cenToken = CryptoJS.enc.Hex.stringify(hash);\r",
 
   							"postman.setEnvironmentVariable(\"username \", username);\r",
-							"postman.setEnvironmentVariable(\"signature\", signature);\r",
-							"postman.setEnvironmentVariable(\"algorithm\", algorithm);\r",
-                            "postman.setEnvironmentVariable(\"timestamp\", timestamp);\r",
-                            "postman.setEnvironmentVariable(\"status\", status);\r",
+							"postman.setEnvironmentVariable(\"status\", status);\r",
+							"postman.setEnvironmentVariable(\"validity\", validity);\r",
 							"postman.setEnvironmentVariable(\"cenToken \", cenToken );"
 						],
 						"type": "text/javascript",
@@ -71,20 +68,22 @@ Call this function to register an active SMS or OTP token.
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"username\": \"{{username}}\",\r\n    \"signature\": \"{{signature}}\",\r\n    \"algorithm\": \"{{algorithm}}\",\r\n  \"timestamp\": \"{{timestamp}}\",\r\n  \"status\": \"{{status}}\",\r\n  \"cenToken\": \"{{cenToken}}\"\r\n}",
+					"raw": "{\r\n    \"username\": \"{{username}}\",\r\n    \"status\": \"{{status}}\",\r\n    \"validity\": \"{{validity}}\",\r\n  \"cenToken\": \"{{cenToken}}\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
 						}
 					}
 				},
-				"url": "https://{{host}}/CentagateWS/webresources/cert/register/pkcs7/{{adminUsername}}"
+				"url": "https://{{host}}/CentagateWS/webresources/device/register/onetimepin/{{adminUsername}}"
 			},
 			"response": []
 		}
 ]
 }
 ```
+
+
 
 ### ♨️Sample Code in JAVA
 
@@ -96,9 +95,7 @@ public static void main(String[] args) {
 	WebResource service = client.resource ("https://<domain_name>/CentagateWS/webresources");
 			
 	Gson gson = new Gson();
-	
-	String timestamp = String.valueOf(System.currentTimeMillis() / 1000L);
-	
+
 	String authToken = "{authToken}"
 	String adminUsername = "{adminUsername}";
 	String secretCode "{secretCode}";
@@ -106,13 +103,11 @@ public static void main(String[] args) {
 
 	HashMap<String, String> map = new HashMap<String, String>();
 	map.put("username", "username");
-	map.put("signature", "signature");
-	map.put("algorithm", "algorithm");
-	map.put("timestamp", timestamp);
 	map.put("status", "status");
+	map.put("validity", "validity");
 	map.put("cenToken", cenToken);  
 
-	ClientResponse response = service.path("cert").path("register").path("pkcs7").path(adminUsername).accept(MediaType.APPLICATION_JSON).put(ClientResponse.class, gson.toJson(map));
+	ClientResponse response = service.path("device").path("register").path("onetimepin").path(adminUsername).accept(MediaType.APPLICATION_JSON).put(ClientResponse.class, gson.toJson(map));
 				
 	String retJson = response.getEntity(String.class);
 
@@ -160,12 +155,8 @@ const https = require('https')
 
 var crypto = require('crypto');
 var username = "<username>";
-var signature = "<signature>";
-var algorithm = "<algorithm>";
-
-var time = Math.round((new Date()).getTime() / 1000);
-var timestamp = time.toString();
 var status = "<status>";
+var validity = "<validity>";
 
 var adminUsername = "<adminUsername>";
 var authToken = "<authToken>";
@@ -182,17 +173,15 @@ hash = cenToken.read().toString('hex');
 
 const data = JSON.stringify({
 	username: username,
-	signature: signature,
-	algorithm: algorithm,
-	timestamp: timestamp,
 	status: status,
+	validity: validity,
 	cenToken: hash
 })
 
 const options = {
 	hostname: "<domain_name>",
 	port: 443,
-	path:'/CentagateWS/webresources/cert/register/pkcs7/"+adminUsername)',
+	path:'/CentagateWS/webresources/device/register/onetimepin/'+adminUsername,
 	method: 'PUT',
 	headers: {
 		'Accept': 'application/json',
@@ -229,20 +218,20 @@ req.write(data)
 req.end()
 ```
 
+
+
 ### 🐍 Sample Code in Python
 
 ```python
 #Configuration
 ADMINUSERNAME = {{adminUsername}}
 HOST = {{host}}
-ENDPOINT = "/CentagateWS/webresourcess/cert/register/pkcs7/" + ADMINUSERNAME
+ENDPOINT = "/CentagateWS/webresources/device/register/onetimepin/" + ADMINUSERNAME
 USERNAME = {{username}}
-SIGNATURE = {{signature}}
-ALGORITHM = {{algorithm}}
-TIMESTAMP = int(time.time())
 STATUS = {{status}}
-SECRET_CODE = {{secretCode}} 
-AUTH_TOKEN = {{authCode}}
+VALIDITY = {{validity}}
+SECRET_CODE = {{secretCode}}
+AUTH_TOKEN = {{authToken}}
 
 # Centoken calculation
 MESSAGE = ADMINUSERNAME + AUTH_TOKEN
@@ -251,10 +240,8 @@ CENTOKEN = hmac.new(SECRET_CODE.encode(), MESSAGE.encode(), hashlib.sha256).hexd
 # JSON Payload
 payload = json.dumps({
     "username": USERNAME,
-    "signature": SIGNATURE,
-    "algorithm": ALGORITHM,
-    "timestamp": TIMESTAMP,
     "status": STATUS,
+    "validity": VALIDITY,
     "cenToken": CENTOKEN
 })
 
@@ -277,12 +264,14 @@ except Exception as e:
     print(f"An error occurred: {e}")
 ```
 
+
 ### 🐘 Sample Code in PHP
 
 ```php
 <?php
+
     $adminUsername = "<adminUsername>";
-    $url = 'https://<domain_name>/CentagateWS/webresources/cert/register/pkcs7/'.$adminUsername;
+    $url = 'https://<domain_name>/CentagateWS/webresources/device/register/onetimepin/'.$adminUsername;
     
     $ch = curl_init($url);
     
@@ -290,21 +279,16 @@ except Exception as e:
     $authToken = "<authToken>";
     
     $username = "<username>";
-    $signature = "<signature>";
-    $validity = "<validity>";
-    $time = time(); // get current timestamp
-    $timestamp = strval($time); //convert timestamp to String
     $status = "<status>";
+    $validity = "<validity>";
     
     $cenToken_text = $adminUsername.$authToken;
     $cenToken = hash_hmac('sha256', $cenToken_text, $secretCode); // calculate cenToken value
     
     $jsonData = array (
     	'username'=> $username,
-    	'signature'=> $signature,
-    	'validity'=> $validity,
-    	'timestamp'=> $timestamp,
     	'status'=> $status,
+    	'validity'=> $validity,
     	'cenToken' => $cenToken
     );
     
