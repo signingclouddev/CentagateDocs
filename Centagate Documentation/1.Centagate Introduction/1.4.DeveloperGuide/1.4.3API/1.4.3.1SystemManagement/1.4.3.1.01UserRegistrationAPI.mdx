@@ -9,86 +9,22 @@ Call this function to add an active user.
 ### 🔍URL
 | **METHOD**   | **PATH**                                                                      | 
 | ------------ | ----------------------------------------------------------------------------- | 
-| PUT          | {{host}}/CentagateWS/webresources/user/registerUserActivate/{{adminUsername}} |
+| PUT          | [host]/CentagateWS/webresources/user/registerUserActivate/[adminUsername]     |
 
 
 ### 📏Parameters
-
-import Table from '@theme/Table';
-
-<Table>
-  <thead>
-    <tr>
-      <th>KEY</th>
-      <th>OCCURRENCES</th>
-      <th>DESCRIPTION</th>
-    </tr>
-  </thead>
-  <tbody>
-  <tr>
-      <td>firstName</td>
-      <td>Required</td>
-      <td>User's first name.</td>
-    </tr>
-    <tr>
-      <td>lastName</td>
-      <td>Required</td>
-      <td>User's last name.</td>
-    </tr>
-    <tr>
-      <td>username</td>
-      <td>Required</td>
-      <td>User's username.</td>
-    </tr>
-    <tr>
-      <td>userApp</td>
-      <td>Required</td>
-      <td>User's application ID.</td>
-    </tr>
-    <tr>
-      <td>userUniqueId</td>
-      <td>Required</td>
-      <td>User's unique ID.</td>
-    </tr>
-    <tr>
-      <td>userClientId</td>
-      <td>Required</td>
-      <td>User's client ID.</td>
-    </tr>
-<tr>
-  <td>roles</td>
-  <td>Required</td>
-  <td>
-    <ul>
-      <li>Company Admin = 2</li>
-      <li>User = 3</li>
-      <li>Group Admin = 4</li>
-    </ul>
-  </td>
-</tr>
-<tr>
-  <td>userGroup</td>
-  <td>Required</td>
-  <td>
-    <ul>
-      <li>Default</li>
-    </ul>
-  </td>
-</tr>
-    <tr>
-      <td>userEmail</td>
-      <td>Required</td>
-      <td>User's valid email.</td>
-    </tr>
-    <tr>
-      <td>cenToken</td>
-      <td>Required</td>
-      <td>This value is calculated using SHA256 with value of authToken and secretCode as the encryption key.</td>
-    </tr>
-  </tbody>
-</Table>
-
-
+| KEY            | OCCURRENCES | DESCRIPTION                 |
+| -------------- | ----------- | --------------------------- |
+| firstName      | Required    | User's first name.          |
+| lastName       | Required    | User's last name.           |
+| username       | Optional    | User's username.            |
+| userApp        | Required    | User's application ID.      |
+| userUniqueId   | Required    | User's unique ID.           |
+| userClientId   | Required    | User's client ID.           |
+| roles          | Required    | User's role. Can be set with value: **2 = Company Admin** or **3 = User** or **4 = Group Admin**.|
+| userGroup      | Required    | User's group name. Example = **default** .|
+| userEmail      | Required    | User's valid email.         |
+| cenToken       | Required    | This value is calculated using SHA256 with value of authToken and secretCode as the encryption key.|
 
 ::: tips
 ⚠️ Make sure to follow the correct spelling of the key.
@@ -97,56 +33,24 @@ import Table from '@theme/Table';
 ### 📬Sample POSTMAN collection in JSON
 
 ```json
-
 }"item": [
 		{
-			"name": "auth/list",
+			"name": "registerUserActivate",
 			"event": [
 				{
 					"listen": "prerequest",
 					"script": {
 						"exec": [
-                            //value
-							"var firstname ='user's firstname';\r",
-                            "var lastname ='user's lastname';\r",
-                            "var username ='user's username';\r",
-                            "var userapp ='user's selected app';\r",
-                            "var userUniqueId ='userUniqueId's username';\r",
-                            "var userClientId ='userClientId's username';\r",
-                            "var userAdditionalData1 ='data 1';\r",
-                            "var userAdditionalData2 ='data 2';\r",
-                            "var userAdditionalData3 ='data  3';\r",
-                            "var userAdditionalData4 ='data  4';\r",
-                            "var userAdditionalData5 ='data 5';\r",
-                            "var userEmail ='user's email';\r",
-                            "var roles ='user's roles';\r",
-                            "var userGroup ='user's group';\r"
-
-                            //calculate cenToken	
-                            "var adminUsername ='admin's username';\r",
-                            "var authToken ='authToken value';\r",
-							"var secretCode='secretCode';r",
-							"var currentDate = Math.round(new Date().getTime()/1000);\r",
-
-							"var message = username + authToken ;\r",
-                            "var hash = CryptoJS.HmacSHA256(message, secretCode);\r",
-                            "var cenToken = CryptoJS.enc.Hex.stringify(hash);\r",
-
-                            "postman.setEnvironmentVariable(\"firstname\", firstname);\r",
-                            "postman.setEnvironmentVariable(\"lastname\", lastname);\r",
-                            "postman.setEnvironmentVariable(\"username\", username);\r",
-                            "postman.setEnvironmentVariable(\"userapp\", userapp);\r",
-                            "postman.setEnvironmentVariable(\"userUniqueId\", userUniqueId);\r",
-                            "postman.setEnvironmentVariable(\"userClientId\", userClientId);\r",
-                            "postman.setEnvironmentVariable(\"userAdditionalData1\", userAdditionalData1);\r",
-                            "postman.setEnvironmentVariable(\"userAdditionalData2\", userAdditionalData2);\r",
-                            "postman.setEnvironmentVariable(\"userAdditionalData3\", userAdditionalData3);\r",
-                            "postman.setEnvironmentVariable(\"userAdditionalData4\", userAdditionalData4);\r",
-                            "postman.setEnvironmentVariable(\"userAdditionalData5\", userAdditionalData5);\r",
-                            "postman.setEnvironmentVariable(\"userEmail\", userEmail);\r",
-                            "postman.setEnvironmentVariable(\"roles\", roles);\r",
-                            "postman.setEnvironmentVariable(\"userGroup\", userGroup);\r",
-                            "postman.setEnvironmentVariable(\"adminUsername\", adminUsername);\r",
+							"var authToken = \"auhToken value";\r",
+							"var secretCode = \"secretCode value";\r",
+							"var adminUsername = \"admin's username";\r",
+							"\r",
+							"//calculate HMAC SHA256 of request parameter using secretKey\r",
+							"var message = adminUsername + authToken;\r",
+							"var hash = CryptoJS.HmacSHA256(message, secretCode);\r",
+							"var cenToken = CryptoJS.enc.Hex.stringify(hash);\r",
+							"\r",
+							"postman.setEnvironmentVariable(\"adminUsername\", adminUsername);\r",
 							"postman.setEnvironmentVariable(\"cenToken\", cenToken);"
 						],
 						"type": "text/javascript",
@@ -159,25 +63,19 @@ import Table from '@theme/Table';
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"firstname\": \"{{firstname}}\",\r\n   \"lastname\": \"{{lastname}}\"\r\n",
-                            "\r\n    \"username\": \"{{username}}\",\r\n   \"userapp\": \"{{userapp}}\"\r\n",
-                            "\r\n    \"userUniqueId\": \"{{userUniqueId}}\",\r\n   \"userClientId\": \"{{userClientId}}\"\r\n",
-                            "\r\n    \"userAdditionalData1\": \"{{userAdditionalData1}}\",\r\n   \"userAdditionalData2\": \"{{userAdditionalData2}}\"\r\n",
-                            "\r\n    \"userAdditionalData3\": \"{{userAdditionalData3}}\",\r\n   \"userAdditionalData4\": \"{{userAdditionalData4}}\"\r\n",
-                            "\r\n    \"userAdditionalData5\": \"{{userAdditionalData5}}\",\r\n   \"userEmail\": \"{{userEmail}}\"\r\n",
-                            "\r\n    \"roles\": \"{{roles}}\",\r\n   \"userGroup\": \"{{userGroup}}\"\r\n",
-                            "\r\n    \"cenToken\": \"{{cenToken}}\"\r\n}",
+					"raw": "{\r\n    \"firstName\": \"first name\", //any supported string\r\n    \"lastName\": \"last name\", //any supported string\r\n    \"username\": \"username\", //any supported string except selected special characters\r\n    \"userApp\": \"user app\", //any app name that already added or created\r\n    \"userUniqueId\": \"user's unique Id\", //any string\r\n    \"userClientId\": \" \", //any string or leave space\r\n    \"userEmail\": \"user@email.com\", //any valid email\r\n    \"roles\": \"role id\", //user's role : CompanyAdmin = 2, User = 3\r\n    \"userGroup\": \"default\", //group name\r\n    \"cenToken\": \"{{cenToken}}\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
 						}
 					}
 				},
-				"url": "https://{{host}}/v2/CentagateWS/webresources/token/registerActiveToken/{{adminUsername}}"
+				"url": "https://{{host}}/CentagateWS/webresources/user/registerUserActivate/{{adminUser}}"
 			},
 			"response": []
 		}
 ]
+}
 ```
 
 
