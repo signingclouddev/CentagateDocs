@@ -4,55 +4,26 @@ title: 🔎Check Token Status API
 
 # 🔎Check Token Status API
 
-Call this function to unlock/unsuspend OTP token.
+Call this function to get user token status.
 
 ### 🔍 URL
 
 | **METHOD**   | **PATH**                                                                      | 
 | ------------ | ----------------------------------------------------------------------------- | 
-| PUT          | {{host}}/CentagateWS/webresources/token/getStatus/{{adminUsername}}           |
+| PUT          | [host]/CentagateWS/webresources/token/getStatus/[adminUsername]               |
 
 
 ### 📏Parameters
-import Table from '@theme/Table';
-
-<Table>
-  <thead>
-    <tr>
-      <th>KEY</th>
-      <th>OCCURRENCES</th>
-      <th>DESCRIPTION</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>username</td>
-      <td>Required</td>
-      <td>The user’s username.</td>
-    </tr>
-    <tr>
-      <td>type</td>
-      <td>Required</td>
-      <td>
-        Type Of The Token Is 
-        
-- 1 = Mobile Token"
-- 2 = SMS Token
-- 3 = CH Token
-- 4 = PKI Token
-      </td>
-    </tr>
-    <tr>
-      <td>cenToken</td>
-      <td>Required</td>
-      <td>The HMAC value is calculated using SHA-256 with secretCode as a key and plain text from adminUsername + authToken</td>
-    </tr>
-  </tbody>
-</Table>
+| KEY            | OCCURRENCES | DESCRIPTION                 |
+| -------------- | ----------- | --------------------------- |
+| username       | Required    | The user's username.        |
+| type           | Required    | Type of the token is : **1 = Mobile Token** or **2 = SMS Token** or **3 = CH Token** or **4 = PKI Token**.|
+| cenToken       | Required    | The Hmac value calculated using SHA256 with secretCode as key and plain text from adminUsername + authToken.|
 
 ::: tips
 ⚠️ Make sure to follow the correct spelling of the key.
 :::
+
 
 ### 📬Sample POSTMAN collection in JSON
 
@@ -65,23 +36,23 @@ import Table from '@theme/Table';
 					"listen": "prerequest",
 					"script": {
 						"exec": [
-                            //value
+                                                        //value
 							"var username ='user's username';\r",
-                            "var type ='token type';\r"
+                                                        "var type ='token type';\r"
           
-                            //calculate cenToken					
-                            "var adminUsername ='admin's username';\r",
-                            "var authToken ='authToken value';\r",
+                                                        //calculate cenToken					
+                                                        "var adminUsername ='admin's username';\r",
+                                                        "var authToken ='authToken value';\r",
 							"var secretCode='secretCode';r",
 							"var currentDate = Math.round(new Date().getTime()/1000);\r",
 
 							"var message = username + authToken ;\r",
-                            "var hash = CryptoJS.HmacSHA256(message, secretCode);\r",
-                            "var cenToken = CryptoJS.enc.Hex.stringify(hash);\r",
+                                                        "var hash = CryptoJS.HmacSHA256(message, secretCode);\r",
+                                                        "var cenToken = CryptoJS.enc.Hex.stringify(hash);\r",
 
-                            "postman.setEnvironmentVariable(\"username\", username);\r",
-                            "postman.setEnvironmentVariable(\"type\", type);\r",
-                            "postman.setEnvironmentVariable(\"adminUsername\", adminUsername);\r",
+                                                        "postman.setEnvironmentVariable(\"username\", username);\r",
+                                                        "postman.setEnvironmentVariable(\"type\", type);\r",
+                                                        "postman.setEnvironmentVariable(\"adminUsername\", adminUsername);\r",
 							"postman.setEnvironmentVariable(\"cenToken\", cenToken);"
 						],
 						"type": "text/javascript",
@@ -108,6 +79,8 @@ import Table from '@theme/Table';
 ]
 }
 ```
+
+
 
 ### ♨️Sample Code in JAVA
 
@@ -170,6 +143,8 @@ public static String convertHmacSha256(String secretKey, String params) throws N
 	}
 }
 ```
+
+
 
 ### 🇯‌🇸‌ Sample Code in Node Js
 
@@ -239,6 +214,8 @@ req.write(data)
 req.end()
 ```
 
+
+
 ### 🐍 Sample Code in Python
 
 ```python
@@ -280,6 +257,8 @@ try:
 except Exception as e:
     print(f"An error occurred: {e}")
 ```
+
+
 
 ### 🐘 Sample Code in PHP
 
