@@ -1,5 +1,5 @@
 ---
-title: "🖋️Verify Signature API"
+title: 🖋️Verify Signature API
 ---
 
 # 🖋️Verify Signature API
@@ -10,20 +10,22 @@ Call this function to verify the PKCS#7 signature.
 
 | **METHOD**   | **PATH**                                                                      | 
 | ------------ | ----------------------------------------------------------------------------- | 
-| PUT          | {{host}}/CentagateWS/webresources/validator/verifySignature                   |
+| PUT          | [host]/CentagateWS/webresources/validator/verifySignature                     |
 
 ### 📏 Parameters
 
 | **KEY**       | **OCCURRENCES** | **DESCRIPTION**                                       |
-|--------------|----------------|-------------------------------------------------------|
-| `username`   | Required        | The user’s username.                                 |
-| `signature`  | Required        | The PKCS#7 Attached Signature Encoded in Base64.    |
-| `algorithm`  | Required        | The Algorithm Used During the Signing. \ **Valid Values:** \ - `0`: SHA-1 \ - `1`: SHA-256 \ - `2`: SHA-384 \ - `3`: SHA-512 |
-| `plainText`  | Required        | The Plain Text of the Signed String Encoded in Base64. |
+|--------------|----------------|-------------------------------------------------------  |
+| username    | Required        | The user’s username.                                    |
+| signature   | Required        | The PKCS#7 attached signature encoded in Base64.        |
+| algorithm   | Required        | The algorithm used during the signing. Valid values are: **0: SHA-1** or **1: SHA-256** or **2: SHA-384** or **3: SHA-512**. |
+| plainText   | Required        | The Plain Text of the Signed String Encoded in Base64. |
 
 ::: tips
 ⚠️ Make sure to follow the correct spelling of the key.
 :::
+
+
 
 ### 📬Sample POSTMAN collection in JSON
 
@@ -37,11 +39,12 @@ Call this function to verify the PKCS#7 signature.
 					"listen": "prerequest",
 					"script": {
 						"exec": [
-                            //value
+                            
+                                                        //value
 							"var username ='user's username';\r",
-                            "var signature ='signature encoded value';\r",
-                            "var algorithm ='algorithm value';\r",
-                            "var plainText ='sign string value';\r"
+                                                        "var signature ='signature encoded value';\r",
+                                                        "var algorithm ='algorithm value';\r",
+                                                        "var plainText ='sign string value';\r"
 						],
 						"type": "text/javascript",
 						"packages": {}
@@ -53,7 +56,8 @@ Call this function to verify the PKCS#7 signature.
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"username\": \"{{username}}\",\r\n   \"signature\": \"{{signature}}\",\r\n   \"algorithm\": \"{{algorithm}}\",\r\n  \"plainText\": \"{{plainText}}\"\r\n}",
+					"raw": "{\r\n    \"username\": \"{{username}}\",\r\n   \"signature\": \"{{signature}}\",\r\n   \"algorithm\": \"{{algorithm}}\",\r\n  
+                                                  \"plainText\": \"{{plainText}}\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -67,6 +71,8 @@ Call this function to verify the PKCS#7 signature.
 ]
 }
 ```
+
+
 
 ### ♨️Sample Code in JAVA
 
@@ -126,6 +132,8 @@ public static String convertHmacSha256(String secretKey, String params) throws N
 }
 ```
 
+
+
 ### 🇯‌🇸‌ Sample Code in Node Js
 
 ```js
@@ -184,6 +192,8 @@ req.write(data)
 req.end()
 ```
 
+
+
 ### 🐍 Sample Code in Python
 
 ```python
@@ -221,6 +231,8 @@ try:
 except Exception as e:
     print(f"An error occurred: {e}")
 ```
+
+
 
 ### 🐘 Sample Code in PHP
 
