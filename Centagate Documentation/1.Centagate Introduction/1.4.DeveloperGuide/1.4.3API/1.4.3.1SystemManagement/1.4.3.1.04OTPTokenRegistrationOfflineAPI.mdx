@@ -10,18 +10,20 @@ Call this function to register offline OTP token.
 
 | **METHOD**   | **PATH**                                                                      | 
 | ------------ | ----------------------------------------------------------------------------- | 
-| PUT          | {{host}}/CentagateWS/webresources/token/register/otp/offline/{{adminUsername}}|
+| PUT          | [host]/CentagateWS/webresources/token/register/otp/offline/[adminUsername]|
 
 
 ### 📏Parameters
 | KEY            | OCCURRENCES | DESCRIPTION                 |
 | -------------- | ----------- | --------------------------- |
 | username       | Required    | The user's username.        |
-| cenToken       | Required    | This value is calculated using SHA256 with value of authToken and secretCode as the encryption key.|
+| cenToken       | Required    | The HMAC value is calculated using SHA-256 with secretCode as a key and plain test from adminusername + authToken.|
 
 ::: tips
 ⚠️ Make sure to follow the correct spelling of the key.
 :::
+
+
 
 ### 📬Sample POSTMAN collection in JSON
 
@@ -73,6 +75,8 @@ Call this function to register offline OTP token.
 ]
 }
 ```
+
+
 
 ### ♨️Sample Code in JAVA
 
@@ -134,6 +138,8 @@ public static String convertHmacSha256(String secretKey, String params) throws N
 	}
 }
 ```
+
+
 
 ### 🇯‌🇸‌ Sample Code in Node Js
 
@@ -201,6 +207,8 @@ req.write(data)
 req.end()
 ```
 
+
+
 ### 🐍 Sample Code in Python
 
 ```python
@@ -240,6 +248,8 @@ try:
 except Exception as e:
     print(f"An error occurred: {e}")
 ```
+
+
 
 ### 🐘 Sample Code in PHP
 
