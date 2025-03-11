@@ -10,37 +10,20 @@ Call this function to retrieve user security question list.
 
 | **METHOD**   | **PATH**                                                                      | 
 | ------------ | ----------------------------------------------------------------------------- | 
-| PUT          | {{host}}/CentagateWS/webresources/security/getUserQuestions/{{adminUsername}} |
+| PUT          | [host]/CentagateWS/webresources/security/getUserQuestions/[adminUsername]     |
 
 
 ### 📏Parameters
-import Table from '@theme/Table';
-
-<Table>
-  <thead>
-    <tr>
-      <th>KEY</th>
-      <th>OCCURRENCES</th>
-      <th>DESCRIPTION</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>username</td>
-      <td>Required</td>
-      <td>User’s username.</td>
-    </tr>
-    <tr>
-      <td>cenToken</td>
-      <td>Required</td>
-      <td>The Hmac Value Calculated Using SHA256 With SecretCode As Key And Plain Text From adminUsername + authToken</td>
-    </tr>
-  </tbody>
-</Table>
+| KEY            | OCCURRENCES | DESCRIPTION                 |
+| -------------- | ----------- | --------------------------- |
+| username       | Required    | The user's username.        |
+| cenToken       | Required    | The Hmac value calculated using SHA256 with secretCode as key and plain text from adminUsername + authToken.|
 
 ::: tips
 ⚠️ Make sure to follow the correct spelling of the key.
 :::
+
+
 
 ### 📬Sample POSTMAN collection in JSON
 
@@ -53,21 +36,20 @@ import Table from '@theme/Table';
 					"listen": "prerequest",
 					"script": {
 						"exec": [
-                            //value
+                                                        //value
 							"var username ='user's username';\r""
           
-                            //calculate cenToken					
-                            "var adminUsername ='admin's username';\r",
-                            "var authToken ='authToken value';\r",
+                                                        / /calculate cenToken					
+                                                        "var adminUsername ='admin's username';\r",
+                                                        "var authToken ='authToken value';\r",
 							"var secretCode='secretCode';r",
 							"var currentDate = Math.round(new Date().getTime()/1000);\r",
-
 							"var message = username + authToken ;\r",
-                            "var hash = CryptoJS.HmacSHA256(message, secretCode);\r",
-                            "var cenToken = CryptoJS.enc.Hex.stringify(hash);\r",
+                                                        "var hash = CryptoJS.HmacSHA256(message, secretCode);\r",
+                                                        "var cenToken = CryptoJS.enc.Hex.stringify(hash);\r",
 
-                            "postman.setEnvironmentVariable(\"adminUsername\", adminUsername);\r",
-                            "postman.setEnvironmentVariable(\"username\", username);\r",
+                                                        "postman.setEnvironmentVariable(\"adminUsername\", adminUsername);\r",
+                                                        "postman.setEnvironmentVariable(\"username\", username);\r",
 							"postman.setEnvironmentVariable(\"cenToken\", cenToken);"
 						],
 						"type": "text/javascript",
@@ -80,7 +62,8 @@ import Table from '@theme/Table';
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"username\": \"{{username}}\",\r\n    \"tokenSn\": \"{{tokenSn}}\",\r\n    \"tokenType\": \"{{tokenType}}\",\r\n  \"cenToken\": \"{{cenToken}}\"\r\n}",
+					"raw": "{\r\n    \"username\": \"{{username}}\",\r\n    \"tokenSn\": \"{{tokenSn}}\",\r\n    \"tokenType\": \"{{tokenType}}\",\r\n  \"cenToken\": 
+                                                  \"{{cenToken}}\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -94,6 +77,8 @@ import Table from '@theme/Table';
 ]
 }
 ```
+
+
 
 ### ♨️Sample Code in JAVA
 
@@ -155,6 +140,8 @@ public static String convertHmacSha256(String secretKey, String params) throws N
 	}
 }
 ```
+
+
 
 ### 🇯‌🇸‌ Sample Code in Node Js
 
@@ -222,6 +209,8 @@ req.write(data)
 req.end()
 ```
 
+
+
 ### 🐍 Sample Code in Python
 
 ```python
@@ -261,6 +250,8 @@ try:
 except Exception as e:
     print(f"An error occurred: {e}")
 ```
+
+
 
 ### 🐘 Sample Code in PHP
 
