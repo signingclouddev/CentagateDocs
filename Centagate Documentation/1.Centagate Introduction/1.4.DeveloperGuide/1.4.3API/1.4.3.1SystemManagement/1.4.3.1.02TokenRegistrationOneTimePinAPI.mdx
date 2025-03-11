@@ -10,51 +10,17 @@ Call this function to register an active SMS or OTP token.
 
 | **METHOD**   | **PATH**                                                                      | 
 | ------------ | ----------------------------------------------------------------------------- | 
-| PUT          | {{host}}/CentagateWS/webresources/user/registerUserActivate/{{adminUsername}} |
+| PUT          | [host]/CentagateWS/webresources/token/registerActiveToken/[adminUsername]     |
 
 
 ### 📏Parameters
 
-import Table from '@theme/Table';
-<Table>
-  <thead>
-    <tr>
-      <th>KEY</th>
-      <th>OCCURRENCES</th>
-      <th>DESCRIPTION</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>username</td>
-      <td>Required</td>
-      <td>Targeted username.</td>
-    </tr>
-    <tr>
-    <tr>
-      <td>tokenSn</td>
-      <td>Required</td>
-      <td>Token serial number.</td>
-    </tr>
-    <tr>
-      <td>tokenType</td>
-      <td>Required</td>
-      <td>
-Token type.
-
-Type available to choose:
-- 1 = SMS Token
-- 2 = OTP Token
-      </td>
-    </tr>
-    <tr>
-      <td>cenToken</td>
-      <td>Required</td>
-      <td>This value is calculated using SHA256 with value of authToken and secretCode as the encryption key.</td>
-    </tr>
-  </tbody>
-</Table>
-
+| KEY            | OCCURRENCES | DESCRIPTION                 |
+| -------------- | ----------- | --------------------------- |
+| username       | Required    | The user's username.        |
+| tokenSn        | Required    | Token serial number.        |
+| tokenType      | Required    | Token type. Type available to choose: **1 = SMS Token** or **2 = OTP Token**.|
+| cenToken       | Required    | This value is calculated using SHA256 with value of authToken and secretCode as the encryption key.|
 
 ::: tips
 ⚠️ Make sure to follow the correct spelling of the key.
