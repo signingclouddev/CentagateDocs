@@ -10,52 +10,21 @@ Call this API to reset user’s question and answers security measures.
 
 | **METHOD**   | **PATH**                                                                      | 
 | ------------ | ----------------------------------------------------------------------------- | 
-| PUT          | {{host}}/CentagateWS/webresources/security/resetQaBPI/{{adminUsername}}       |
+| PUT          | [host]/CentagateWS/webresources/security/resetQaBPI/[adminUsername]           |
 
 
 ### 📏Parameters
-import Table from '@theme/Table';
-
-<Table>
-  <thead>
-    <tr>
-      <th>KEY</th>
-      <th>OCCURRENCES</th>
-      <th>DESCRIPTION</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>username</td>
-      <td>Required</td>
-      <td>The user’s username.</td>
-    </tr>
-    <tr>
-      <td>data</td>
-      <td>Required</td>
-      <td>Base64 encoding of the list of questions and answers.
-
-*Format*:
-
-Base64 (<ID_1>:<Custom question_1 if ID_1=0. Otherwise, empty string>:<Answer_2> ,<ID_2>:<Custom question_2 if ID_2=0. Otherwise, empty string >:<Answer_2>)
-
- 
-
-*Example*: 0:Quest1:Hello World,2::Foo123 will be sent as
-
-MDpRdWVzdDE6SGVsbG8gV29ybGQsMjo6Rm9vMTIz</td>
-    </tr>
-    <tr>
-      <td>cenToken</td>
-      <td>Required</td>
-      <td>The HMAC value is calculated using SHA-256 with secretCode as a key and plain text from admin username + authToken.</td>
-    </tr>
-  </tbody>
-</Table>
+| KEY            | OCCURRENCES | DESCRIPTION                 |
+| -------------- | ----------- | --------------------------- |
+| username       | Required    | The user's username.        |
+| data           | Required    |Base64 encoded of the list of questions and answer. Format: **Base64 (:: ,::)**. Example: **0:Quest1:Hello World,2::Foo123** and it will be sent s **MDpRdWVzdDE6SGVsbG8gV29ybGQsMjo6Rm9vMTIz** .​|
+| cenToken       | Required    | The Hmac value calculated using SHA256 with secretCode as key and plain text from adminUsername + authToken.|
 
 ::: tips
 ⚠️ Make sure to follow the correct spelling of the key.
 :::
+
+
 
 ### 📬Sample POSTMAN collection in JSON
 
@@ -68,23 +37,22 @@ MDpRdWVzdDE6SGVsbG8gV29ybGQsMjo6Rm9vMTIz</td>
 					"listen": "prerequest",
 					"script": {
 						"exec": [
-                            //value
+                                                        //value
 							"var username ='user's username';\r",
 							"var data ='question and answer data';\r"
           
-                            //calculate cenToken					
-                            "var adminUsername ='admin's username';\r",
-                            "var authToken ='authToken value';\r",
+                                                        //calculate cenToken					
+                                                        "var adminUsername ='admin's username';\r",
+                                                        "var authToken ='authToken value';\r",
 							"var secretCode='secretCode';r",
 							"var currentDate = Math.round(new Date().getTime()/1000);\r",
-
 							"var message = username + authToken ;\r",
-                            "var hash = CryptoJS.HmacSHA256(message, secretCode);\r",
-                            "var cenToken = CryptoJS.enc.Hex.stringify(hash);\r",
+                                                        "var hash = CryptoJS.HmacSHA256(message, secretCode);\r",
+                                                        "var cenToken = CryptoJS.enc.Hex.stringify(hash);\r",
 
   							"postman.setEnvironmentVariable(\"username\", username);\r",
 							"postman.setEnvironmentVariable(\"data\", data);\r",
-                            "postman.setEnvironmentVariable(\"adminUsername\", adminUsername);\r",
+                                                         "postman.setEnvironmentVariable(\"adminUsername\", adminUsername);\r",
 							"postman.setEnvironmentVariable(\"cenToken\", cenToken);"
 						],
 						"type": "text/javascript",
@@ -111,6 +79,8 @@ MDpRdWVzdDE6SGVsbG8gV29ybGQsMjo6Rm9vMTIz</td>
 ]
 }
 ```
+
+
 
 ### ♨️Sample Code in JAVA
 
@@ -173,6 +143,8 @@ public static String convertHmacSha256(String secretKey, String params) throws N
 	}
 }
 ```
+
+
 
 ### 🇯‌🇸‌ Sample Code in Node Js
 
@@ -242,6 +214,8 @@ req.write(data)
 req.end()
 ```
 
+
+
 ### 🐍 Sample Code in Python
 
 ```python
@@ -296,6 +270,8 @@ try:
 except Exception as e:
     print(f"An error occurred: {e}")
 ```
+
+
 
 ### 🐘 Sample Code in PHP
 
