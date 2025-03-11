@@ -10,50 +10,21 @@ Call this function to register an offline OTP Token.
 
 | **METHOD**   | **PATH**                                                                      | 
 | ------------ | ----------------------------------------------------------------------------- | 
-| PUT          | {{host}}/CentagateWS/webresources/token/unregisterActiveToken/{{adminUsername}} |
+| PUT          | [host]/CentagateWS/webresources/token/unregisterActiveToken/[adminUsername]   |
 
 
 ### 📏Parameters
-
-import Table from '@theme/Table';
-
-<Table>
-  <thead>
-    <tr>
-      <th>KEY</th>
-      <th>OCCURRENCES</th>
-      <th>DESCRIPTION</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>username</td>
-      <td>Required</td>
-      <td>The user’s username.</td>
-    </tr>
-    <tr>
-      <td>type</td>
-      <td>Required</td>
-      <td>
-The token type.
-
-- 1 = Mobile Token
-- 2 = SMS Token
-- 3 = Challenge Respond Token 
-- 4 = PKI
-      </td>
-    </tr>
-    <tr>
-      <td>cenToken</td>
-      <td>Required</td>
-      <td>The HMAC value is calculated using SHA-256 with secretCode as a key and plain text from admin username + authToken.</td>
-    </tr>
-  </tbody>
-</Table>
+| KEY            | OCCURRENCES | DESCRIPTION                 |
+| -------------- | ----------- | --------------------------- |
+| username       | Required    | The user's username.        |
+| type           | Required    | The token type that can be set are **1 = Mobile Token** or **2 = SMS Token** or **3 = Challenge Respond Token** or **4 = PKI** .|
+| cenToken       | Required    | The HMAC value is calculated using SHA-256 with secretCode as a key and plain text from admin username + authToken. |
 
 ::: tips
 ⚠️ Make sure to follow the correct spelling of the key.
 :::
+
+
 
 ### 📬Sample POSTMAN collection in JSON
 
@@ -108,6 +79,8 @@ The token type.
 ]
 }
 ```
+
+
 
 ### ♨️Sample Code in JAVA
 
@@ -170,6 +143,8 @@ public static String convertHmacSha256(String secretKey, String params) throws N
 	}
 }
 ```
+
+
 
 ### 🇯‌🇸‌ Sample Code in Node Js
 
@@ -239,6 +214,8 @@ req.write(data)
 req.end()
 ```
 
+
+
 ### 🐍 Sample Code in Python
 
 ```python
@@ -280,6 +257,8 @@ try:
 except Exception as e:
     print(f"An error occurred: {e}")
 ```
+
+
 
 ### 🐘 Sample Code in PHP
 
