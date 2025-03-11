@@ -1,59 +1,61 @@
 ---
-title: ❓Save Question & Answer API
+title: 🔁Sync Token API
 ---
 
-# ❓Save Question & Answer API
+# 🔁Sync Token API
 
-This API helps you to save user’s question and answer through API call.
+Call this function to register an offline OTP Token.
 
 ### 🔍 URL
 
 | **METHOD**   | **PATH**                                                                      | 
 | ------------ | ----------------------------------------------------------------------------- | 
-| PUT          | {{host}}/CentagateWS/webresources/security/saveUserQuestions/{{adminUsername}}|
+| PUT          | [host]/CentagateWS/webresources/token/syncToken/[adminUsername]               |
 
 
 ### 📏Parameters
 | KEY            | OCCURRENCES | DESCRIPTION                 |
 | -------------- | ----------- | --------------------------- |
-| username       | Required    | The OTP owner's username.   |
-| tokenSn        | Required    | The mobile number of the Hardware Token Serial Number. This is mandatory for token-type SMS and OTP. (For the OTP token type, make sure the token is not bound to any user and the token status is in **DEACTIVATE status**. |
-| tokenType      | Required    | The token type. SMS = 1, OTP = 2. |
-| cenToken       | Required    | The HMAC value is calculated using SHA-256 with secretCode as a key and plain text from admin username + authToken|
+| username       | Required    | User's username.            |
+| otpStr1        | Required    | The first OTP.              |
+| otpStr2        | Required    | The second OTP.             |
+| cenToken       | Required    | The HMAC value is calculated using SHA-256 with secretCode as a key and plain text from admin username + authToken. |
 
 ::: tips
 ⚠️ Make sure to follow the correct spelling of the key.
 :::
+
 
 ### 📬Sample POSTMAN collection in JSON
 
 ```json
 }"item": [
 		{
-			"name": "saveUserQuestions",
+			"name": "syncToken",
 			"event": [
 				{
 					"listen": "prerequest",
 					"script": {
 						"exec": [
-                            //value
+                                                        //value
 							"var username ='user's username';\r",
-							"var data ='question and answer's data';\r"
-          
-                            //calculate cenToken		
-                            "var adminUsername ='admin's username';\r",			
-                            "var authToken ='authToken value';\r",
-							"var secretCode ='secretCode';r",
+							"var otpStr1 ='first otp';\r",
+                                                        "var otpStr2 ='second otp';\r",
+                                                        "var adminUsername ='admin's username';\r"
+
+                                                         //calculate cenToken					
+                                                        "var authToken ='authToken value';\r",
+							"var secretCode='secretCode';r",
 							"var currentDate = Math.round(new Date().getTime()/1000);\r",
 
-							"var message = adminUsername + authToken ;\r",
-                            "var hash = CryptoJS.HmacSHA256(message, secretCode);\r",
-                            "var cenToken = CryptoJS.enc.Hex.stringify(hash);\r",
+							"var message = username + authToken ;\r",
+                                                        "var hash = CryptoJS.HmacSHA256(message, secretCode);\r",
+                                                        "var cenToken = CryptoJS.enc.Hex.stringify(hash);\r",
 
-  							"postman.setEnvironmentVariable(\"username \", username);\r",
-							"postman.setEnvironmentVariable(\"data\", data);\r",
-							"postman.setEnvironmentVariable(\"adminUsername\", adminUsername);\r",
-							"postman.setEnvironmentVariable(\"cenToken \", cenToken );"
+  							"postman.setEnvironmentVariable(\"username\", username);\r",
+							"postman.setEnvironmentVariable(\"otpStr1\", otpStr1);\r",
+							"postman.setEnvironmentVariable(\"otpStr2\", otpStr2);\r",
+							"postman.setEnvironmentVariable(\"cenToken \", cenToken);"
 						],
 						"type": "text/javascript",
 						"packages": {}
@@ -65,20 +67,22 @@ This API helps you to save user’s question and answer through API call.
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"username\": \"{{username}}\",\r\n    \"data\": \"{{data}}\",\r\n   \"cenToken\": \"{{cenToken}}\"\r\n}",
+					"raw": "{\r\n    \"username\": \"{{username}}\",\r\n    \"otpStr1\": \"{{otpStr1}}\",\r\n    \"otpStr2\": \"{{otpStr2}}\",\r\n  \"cenToken\": {{cenToken}}\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
 						}
 					}
 				},
-				"url": "https://{{host}}/CentagateWS/webresources/security/saveUserQuestions/{{adminUsername}}"
+				"url": "https://{{host}}/CentagateWS/webresources/token/syncToken/{{adminUsername}}"
 			},
 			"response": []
 		}
 ]
 }
 ```
+
+
 
 ### ♨️Sample Code in JAVA
 
@@ -98,10 +102,11 @@ public static void main(String[] args) {
 
 	HashMap<String, String> map = new HashMap<String, String>();
 	map.put("username", "username");
-	map.put("data", "data");
+	map.put("otpStr1", "otpStr1");
+	map.put("otpStr2", "otpStr2");
 	map.put("cenToken", cenToken);  
 
-	ClientResponse response = service.path("security").path("saveUserQuestions").path(adminUsername).accept(MediaType.APPLICATION_JSON).put(ClientResponse.class, gson.toJson(map));
+	ClientResponse response = service.path("token").path("syncToken").path(adminUsername).accept(MediaType.APPLICATION_JSON).put(ClientResponse.class, gson.toJson(map));
 				
 	String retJson = response.getEntity(String.class);
 
@@ -149,7 +154,8 @@ const https = require('https')
 
 var crypto = require('crypto');
 var username = "<username>";
-var data = "<data>";
+var otpStr1 = "<otpStr1>";
+var otpStr2 = "<otpStr2>";
 
 var adminUsername = "<adminUsername>";
 var authToken = "<authToken>";
@@ -166,14 +172,15 @@ hash = cenToken.read().toString('hex');
 
 const data = JSON.stringify({
 	username: username,
-	data: data,
+	otpStr1: otpStr1,
+	otpStr2: otpStr2,
 	cenToken: hash
 })
 
 const options = {
 	hostname: "<domain_name>",
 	port: 443,
-	path:'/CentagateWS/webresources/security/saveUserQuestions/'+adminUsername,
+	path:'/CentagateWS/webresources/token/syncToken/'+adminUsername,
 	method: 'PUT',
 	headers: {
 		'Accept': 'application/json',
@@ -207,8 +214,10 @@ req.on('ERROR', error => {
 })
 
 req.write(data)
-req.end()
+req.end() 
 ```
+
+
 
 ### 🐍 Sample Code in Python
 
@@ -216,8 +225,10 @@ req.end()
 #Configuration
 ADMINUSERNAME = {{adminUsername}}
 HOST = {{host}}
-ENDPOINT = "/CentagateWS/webresources/security/saveUserQuestions/" + ADMINUSERNAME
+ENDPOINT = "/CentagateWS/webresources/token/syncToken/" + ADMINUSERNAME
 USERNAME = {{username}}
+OTPSTR1 = {{otpStr1}}
+OTPSTR2 = {{otpStr2}}
 SECRET_CODE = {{secretCode}}
 AUTH_TOKEN = {{authToken}}
 
@@ -225,23 +236,11 @@ AUTH_TOKEN = {{authToken}}
 MESSAGE = ADMINUSERNAME + AUTH_TOKEN
 CENTOKEN = hmac.new(SECRET_CODE.encode(), MESSAGE.encode(), hashlib.sha256).hexdigest()
 
-#Convert data to Based64
-qa_list = [
-    (0, "Quest1", "Hello World"),
-    (2, "", "Foo123")
-]
-
-# Convert list of questions and answers to the specified format
-formatted_qa = "::".join([f"{q[0]}:{q[1]}:{q[2]}" for q in qa_list])
-
-# Encode the formatted string in Base64
-DATA = base64.b64encode(formatted_qa.encode()).decode()
-
-
 # JSON Payload
 payload = json.dumps({
     "username": USERNAME,
-    "data": DATA,
+    "otpStr1": OTPSTR1,
+    "otpStr2": OTPSTR2,
     "cenToken": CENTOKEN
 })
 
@@ -264,17 +263,20 @@ except Exception as e:
     print(f"An error occurred: {e}")
 ```
 
+
+
 ### 🐘 Sample Code in PHP
 
 ```php
 <?php
     $adminUsername = "<adminUsername>";
-    $url = 'https://<domain_name>/CentagateWS/webresources/security/saveUserQuestions/'.$adminUsername;
+    $url = 'https://<domain_name>/CentagateWS/webresources/token/syncToken/'.$adminUsername;
     
     $ch = curl_init($url);
     
     $username = "<username>";
-    $data = "<data>";
+    $otpStr1 = "<otpStr1>";
+    $otpStr2 = "<otpStr2>";
     
     $secretCode = "<secretCode>";
     $authToken = "<authToken>";
@@ -283,7 +285,8 @@ except Exception as e:
     
     $jsonData = array (
     	'username'=> $username,
-    	'data'=> $data,
+    	'otpStr1'=> $otpStr1,
+    	'otpStr2'=> $otpStr2,
     	'cenToken' => $cenToken
     );
     
