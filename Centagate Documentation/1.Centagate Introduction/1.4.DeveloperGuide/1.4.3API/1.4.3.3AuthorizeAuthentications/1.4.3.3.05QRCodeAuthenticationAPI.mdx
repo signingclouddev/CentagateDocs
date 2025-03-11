@@ -10,7 +10,7 @@ Authentication function that verifies username and QR. User has to request a QR 
 
 | **METHOD**   | **PATH**                                                                      | 
 | ------------ | ----------------------------------------------------------------------------- | 
-| POST         | /v2/CentagateWS/webresources/auth/authQrCode                                  |
+| POST         | [host]/v2/CentagateWS/webresources/auth/authQrCode                            |
 
 
 ### 📏Parameters
@@ -30,13 +30,15 @@ Authentication function that verifies username and QR. User has to request a QR 
 | ipAddress      | Optional    | User’s current IP Address.  |
 | userAgent      | Optional    | Platform Information of Authentication Request Is Made Of.|
 | browserFp      | Optional    | User’s current browser fingerprint.|
-| hmac           | Required    |Hmac Generated From Combination (username + devAccId + otp + challenge + details + integrationKey + unixTimeStamp + authToken + supportFido + ipAddress + browserFp + userAgent) Using Secretkey (Can Be Obtained From The App Page) As The Key​.|
+| hmac           | Required    |Hmac Generated From Combination (username + devAccId + otp + challenge + details + integrationKey + unixTimeStamp + authToken + supportFido + ipAddress + browserFp + userAgent) Using Secretkey (Can Be Obtained From The App Page) As The Key.|
 
 
 
 ::: tips
 ⚠️ Make sure to follow the correct spelling of the key.
 :::
+
+
 
 ### 📬Sample POSTMAN collection in JSON
 
