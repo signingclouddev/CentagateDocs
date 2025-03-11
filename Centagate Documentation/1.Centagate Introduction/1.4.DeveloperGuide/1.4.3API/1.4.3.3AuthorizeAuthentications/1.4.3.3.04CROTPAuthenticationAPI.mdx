@@ -10,7 +10,7 @@ Authentication function that verifies username and Challenge Response OTP combin
 
 | **METHOD**   | **PATH**                                                                      | 
 | ------------ | ----------------------------------------------------------------------------- | 
-| POST         |  /v2/CentagateWS/webresources/auth/authCrOtp                                  |
+| POST         |  [host]/v2/CentagateWS/webresources/auth/authCrOtp                            |
 
 
 ### 📏Parameters
@@ -18,22 +18,24 @@ Authentication function that verifies username and Challenge Response OTP combin
 | -------------- | ----------- | --------------------------- |
 | username       | Required    | The user's username.        |
 | devAccId       | Required    | The device account ID.      |
-| challenge      | Required    | Challenge Code That Is Sent from Server to User.|
-| crOtp          | Required    | Challenge Response OTP That Generated From In CENTAGATE Cloud App.|
-| authToken      | Optional    | The Previous generated authToken.|
+| challenge      | Required    | Challenge code that is sent from server to user.|
+| crOtp          | Required    | Challenge response OTP that generated from in CENTAGATE Cloud App.|
+| authToken      | Optional    | The previous generated authToken.|
 | integrationKey | Optional    | The integration key of the App.|
 | unixTimestamp  | Required    | User’s current time in Unix timestamp.|
-| supportFido    | Optional    | FIDO Authentication Option, Pass True to Enable and False to Disable. Or Leave It Empty.|
+| supportFido    | Optional    | FIDO authentication option, pass **True** to enable and **False** to disable or leave it empty.|
 | ipAddress      | Optional    | User’s current IP Address.|
-| userAgent      | Optional    | Platform Information of Authentication Request Is Made Of.|
+| userAgent      | Optional    | Platform information of authentication request is made of.|
 | browserFp      | Optional    | User’s current browser fingerprint.|
-| otpType        | Required    | Insert "Online" If Its Mobile Token Or Insert "Offline" If Its Hardware Token.        |
+| otpType        | Required    | Insert **"Online"** if its mobile token or insert **"Offline"** if its hardware token.|
 | tokenId        | Required    | Token serial number.|
-| hmac           | Required    | Hmac Generated From Combination (Username + DevAccId + CrOtp + OtpType + Challenge + IntegrationKey + UnixTimeStamp + AuthToken + SupportFido + IpAddress + UserAgent + BrowserFp) Using Secretkey (Can Be Obtained From The App Page) As The Key.|
+| hmac           | Required    | Hmac generated from combination (username + devAccId +  crOtp + otpType + challenge + integrationKey + unixTimeStamp + authToken + supportFido + ipAddress + userAgent + browserFp) using Secretkey (Can be obtained from the App page) as the key.|
 
 ::: tips
 ⚠️ Make sure to follow the correct spelling of the key.
 :::
+
+
 
 ### 📬Sample POSTMAN collection in JSON
 
@@ -46,27 +48,27 @@ Authentication function that verifies username and Challenge Response OTP combin
 					"listen": "prerequest",
 					"script": {
 						"exec": [
-                            //value
+                            				//value
 							"var username ='user's username';\r",
 							"var devAccId ='device id';\r",
-                            "var challenge ='generated code';\r",
-                            "var crOtp ='generated response code';\r",
-                            "var integrationKey ='app integration key';\r",
-                            "var secretKey ='app secret key';\r",
+                            				"var challenge ='generated code';\r",
+                            				"var crOtp ='generated response code';\r",
+                            				"var integrationKey ='app integration key';\r",
+                            				"var secretKey ='app secret key';\r",
 							"var unixTimestamp ='local unixtimestamp';\r"
 
-                             //calculate HMAC SHA256 of request parameter using secretKey
-                            "var message = username + devAccId + challenge + crOtp + integrationKey + unixTimestamp;\r",
-                            "var hash = CryptoJS.HmacSHA256(message, secretKey);\r",
-                            "var hmac = CryptoJS.enc.Hex.stringify(hash);\r"
+                             				//calculate HMAC SHA256 of request parameter using secretKey
+                            				"var message = username + devAccId + challenge + crOtp + integrationKey + unixTimestamp;\r",
+                            				"var hash = CryptoJS.HmacSHA256(message, secretKey);\r",
+                            				"var hmac = CryptoJS.enc.Hex.stringify(hash);\r"
 
   							"postman.setEnvironmentVariable(\"username \", username);\r",
 							"postman.setEnvironmentVariable(\"devAccId\", devAccId);\r",
-                            "postman.setEnvironmentVariable(\"challenge\", challenge);\r",
-                            "postman.setEnvironmentVariable(\"crOtp\", crOtp);\r",
+                            				"postman.setEnvironmentVariable(\"challenge\", challenge);\r",
+                            				"postman.setEnvironmentVariable(\"crOtp\", crOtp);\r",
 							"postman.setEnvironmentVariable(\"integrationKey\", integrationKey);",
-                            "postman.setEnvironmentVariable(\"unixTimestamp\", unixTimestamp);",
-                            "postman.setEnvironmentVariable(\"hmac\", hmac);"
+                            				"postman.setEnvironmentVariable(\"unixTimestamp\", unixTimestamp);",
+                            				"postman.setEnvironmentVariable(\"hmac\", hmac);"
 						],
 						"type": "text/javascript",
 						"packages": {}
@@ -78,7 +80,7 @@ Authentication function that verifies username and Challenge Response OTP combin
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"username\": \"{{username}}\",\r\n    \"devAccId\": \"{{devAccId}}\",\r\n  \"challenge\": \"{{challenge}}\",\r\n   \"crOtp\": \"{{crOtp}}\",\r\n   \"integrationKey\": \"{{integrationKey}}\",\r\n    \"unixTimestamp\": \"{{unixTimestamp}}\",\r\n  \"hmac\": \"{{hmac}}\"\r\n}",
+					"raw": "{\r\n    \"username\": \"{{username}}\",\r\n    \"devAccId\": \"{{devAccId}}\",\r\n  \"challenge\": \"{{challenge}}\",\r\n   \"crOtp\": 					{{crOtp}}\",\r\n   \"integrationKey\": \"{{integrationKey}}\",\r\n    \"unixTimestamp\": \"{{unixTimestamp}}\",\r\n  \"hmac\": \"{{hmac}}\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -92,6 +94,8 @@ Authentication function that verifies username and Challenge Response OTP combin
 ]
 }
 ```
+
+
 
 ### ♨️Sample Code in JAVA
 
@@ -162,6 +166,8 @@ public static String convertHmacSha256(String secretKey, String params) throws N
 	}
 }
 ```
+
+
 
 ### 🇯‌🇸‌ Sample Code in Node Js
 
@@ -249,6 +255,8 @@ req.on('ERROR', error => {
 req.write(data)
 req.end()
 ```
+
+
 
 ### 🐍 Sample Code in Python
 
