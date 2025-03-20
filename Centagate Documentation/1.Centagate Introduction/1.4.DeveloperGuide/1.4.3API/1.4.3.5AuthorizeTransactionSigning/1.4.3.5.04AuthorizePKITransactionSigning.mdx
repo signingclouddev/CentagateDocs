@@ -1,0 +1,67 @@
+---
+title: 🪪 Authorize PKI Transaction Signing
+---
+
+#  🪪 Authorize PKI Transaction Signing
+
+Authorize Transaction Signing function that verify user’s username with PKI certificate together with transactions.
+
+### 🔍 URL
+
+| **METHOD**   | **PATH**                                                                      | 
+| ------------ | ----------------------------------------------------------------------------- | 
+| POST         | [host]/v2/CentagateWS/webresources/auth/authPkiPkcs7                          |
+
+
+### 📏Parameters
+| KEY            | OCCURRENCES | DESCRIPTION                 |
+| -------------- | ----------- | --------------------------- |
+| username       | Required    | The user's username.        |
+| signature      | Required    | The PKCS#7 attached signature encoded in based64.|
+| algorithm      | Required    | The previous generated authToken.|
+| plaintext      | Required    | The previous generated authToken.|
+| authToken      | Optional    | The previous generated authToken.|
+| integrationKey | Required    | The integration key of the App.|
+| unixTimestamp  | Required    | User’s current time in unix timestamp.|
+| supportFido    | Optional    | FIDO authentication option, Pass **"True"** to Enable and **"False"** to Disable or leave it empty.|
+| ipAddress      | Optional    | User’s current ip address.  |
+| userAgent      | Optional    | Platform information of authentication request is made of.|
+| browserFp      | Optional    | User’s current browser fingerprint.|
+| transactionValue      | Required    | The previous generated authToken.|
+| isTransaction      | Required    | The previous generated authToken.|
+| hmac           | Required    | |
+
+
+::: tips
+⚠️ Make sure to follow the correct spelling of the key.
+:::
+
+### 📬Sample POSTMAN collection in JSON
+
+```json
+
+```
+
+### ♨️Sample Code in JAVA
+
+```java
+
+```
+
+### 🇯‌🇸‌ Sample Code in Node Js
+
+```js
+
+```
+
+### 🐍 Sample Code in Python
+
+```python
+
+```
+
+### 🐘 Sample Code in PHP
+
+```php
+
+```
