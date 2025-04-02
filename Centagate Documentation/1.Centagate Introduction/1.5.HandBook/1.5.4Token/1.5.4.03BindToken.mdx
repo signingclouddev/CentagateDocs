@@ -1,0 +1,54 @@
+---
+title: 🔗Bind Token
+---
+
+# 🔗Bind Token
+
+### Token
+
+To bind a token to a user, you must know that there are 2 types of Tokens generally in CENTAGATE.
+There are:
+- **OTP Token**.
+- **SMS Token**.
+
+### 🤔What is OTP Token?
+
+OTP is stand for ***One-Time-Password***, which means you may use the token only once after it’s been generated, and it is generated based on current time and a secret key. 
+In CENTAGATE, there are **2 type of OTP tokens**.
+
+There are: 
+
+✓ **Hardware Token**  
+✓ **Soft Token**
+Under Soft Token, there are **2 types of Soft Token**, which is: 
+- **Time-Based (TOTP)**
+- **Challenge Response (CROTP)**
+
+### 🤔What is Hardware Token?
+
+A hardware token is a device, typically provided by companies like **Feitian**, used for authentication. 
+It generates secure codes for login, adding an extra layer of security to systems or networks. 
+Users need to use the generated code to authenticate. These tokens are physical and often come in forms like small device.
+
+&#x20;    
+<p align="center">
+  <img 
+    src="https://raw.githubusercontent.com/signingclouddev/CentagateDocs/main/image/1.5 Hanbook/feitian.png" 
+    width="300" 
+    height="300" 
+    alt="Feitian"
+  />
+</p>
+
+### 🤔What is Soft Token?
+
+Soft token also known as a software token or virtual token, is a type of security credential used in authentication systems. Instead of being a physical device like a hardware token, a soft token is typically a software application that generates one-time passwords for authentication. To install soft token, user need to import the soft token seed file to CENTAGATE for allowing immediate use.
+
+Remember there are 2 types of soft tokens? So here is the explanation.
+
+There are:
+- **Time-Based (TOTP)**  
+Time-Based One Time Password is a temporary one-time-password being generated for user to authenticate based on the current time and secret key.
+
+- **Challenge Response (CROTP)**  
+Challenge-Response One Time Password is an authentication that involves a challenge being issued by CENTAGATE to the user, who then provides a response based on a generated code shared between the user and CENTAGATE.
